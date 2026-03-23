@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Financial profile of a user",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "name": { "type": "string", "description": "User display name" },
+        "vitality_score": { "type": "number", "description": "Financial health score" },
+        "balance": { "type": "number", "description": "Current total balance" },
+        "monthly_spending": { "type": "number", "description": "Estimated monthly spending" },
+        "savings": { "type": "number", "description": "Total savings" },
+        "currency": { "type": "string", "description": "Preferred currency" },
+        "primary_goal": { "type": "string", "description": "Main financial objective" },
+        "income_range": { "type": "string", "description": "Annual income bracket" },
+        "credit_score_range": { "type": "string", "description": "Estimated credit score" },
+        "notifications": { "type": "object", "description": "Notification settings" }
+      },
+      "required": ["uid", "name", "vitality_score", "balance", "monthly_spending", "savings", "currency", "primary_goal", "income_range", "credit_score_range"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "A single financial transaction",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique transaction ID" },
+        "user_id": { "type": "string", "description": "Owner UID" },
+        "amount": { "type": "number", "description": "Transaction amount" },
+        "category": { "type": "string", "description": "Spending category" },
+        "is_flagged": { "type": "boolean", "description": "Whether AI flagged it as suspicious" },
+        "timestamp": { "type": "number", "description": "Unix timestamp" },
+        "name": { "type": "string", "description": "Merchant or transaction name" }
+      },
+      "required": ["id", "user_id", "amount", "category", "is_flagged", "timestamp", "name"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Transaction records"
+    }
+  }
+}

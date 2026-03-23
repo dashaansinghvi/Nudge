@@ -1,0 +1,109 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required)
+    //   - name: string (required)
+    //   - vitality_score: number (required)
+    //   - balance: number (required)
+    //   - monthly_spending: number (required)
+    //   - savings: number (required)
+    //   - currency: string (required)
+    //   - primary_goal: string (required)
+    //   - income_range: string (required)
+    //   - credit_score_range: string (required)
+    //   - notifications: map (optional)
+    //
+    // Collection: transactions
+    // Document ID: {transactionId}
+    // Fields:
+    //   - id: string (required)
+    //   - user_id: string (required)
+    //   - amount: number (required)
+    //   - category: string (required)
+    //   - is_flagged: bool (required)
+    //   - timestamp: number (required)
+    //   - name: string (required)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.user_id;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+    function isValidUser(data) {
+      return data.uid is string && data.uid.size() > 0 && data.uid.size() < 128 &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+             data.vitality_score is number && data.vitality_score >= 0 && data.vitality_score <= 100 &&
+             data.balance is number &&
+             data.monthly_spending is number &&
+             data.savings is number &&
+             data.currency is string && data.currency.size() > 0 && data.currency.size() < 10 &&
+             data.primary_goal is string && data.primary_goal.size() > 0 && data.primary_goal.size() < 100 &&
+             data.income_range is string && data.income_range.size() > 0 && data.income_range.size() < 100 &&
+             data.credit_score_range is string && data.credit_score_range.size() > 0 && data.credit_score_range.size() < 100;
+    }
+
+    function isValidTransaction(data) {
+      return data.id is string && data.id.size() > 0 && data.id.size() < 128 &&
+             data.user_id is string && data.user_id == request.auth.uid &&
+             data.amount is number &&
+             data.category is string && data.category.size() > 0 && data.category.size() < 50 &&
+             data.is_flagged is bool &&
+             data.timestamp is number &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 200;
+    }
+
+    // ===============================================================
+    // Match Blocks
+    // ===============================================================
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && 
+                      hasRequiredFields(['uid', 'name', 'vitality_score', 'balance', 'monthly_spending', 'savings', 'currency', 'primary_goal', 'income_range', 'credit_score_range']) &&
+                      isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && 
+                      isValidUser(request.resource.data) &&
+                      request.resource.data.uid == resource.data.uid;
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && (resource == null || resource.data.user_id == request.auth.uid);
+      allow create: if isAuthenticated() && 
+                      hasRequiredFields(['id', 'user_id', 'amount', 'category', 'is_flagged', 'timestamp', 'name']) &&
+                      isValidTransaction(request.resource.data);
+      allow update: if isDocOwner() && 
+                      isValidTransaction(request.resource.data) &&
+                      request.resource.data.user_id == resource.data.user_id;
+      allow delete: if isDocOwner();
+    }
+  }
+}

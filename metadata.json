@@ -1,0 +1,5 @@
+{
+  "name": "Nudge – Your AI Financial Companion",
+  "description": "Nudge – Smarter Financial Decisions, One Nudge at a Time. Comprehensive AI-powered personal finance application with smart insights, credit intelligence, and bill optimization.",
+  "requestFramePermissions": ["camera"]
+}
