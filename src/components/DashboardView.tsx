@@ -152,7 +152,7 @@ const DashboardView = React.memo(function DashboardView({ profile, transactions 
       <header className="flex items-center justify-between flex-shrink-0">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-0.5">Analytics Dashboard</h1>
-          <p className="text-white/30 text-xs">Your financial vitality is looking strong today.</p>
+          <p className="text-nudge-secondary-text text-xs">Your financial vitality is looking strong today.</p>
         </div>
         <div className="flex items-center gap-2">
           <button 
@@ -187,7 +187,7 @@ const DashboardView = React.memo(function DashboardView({ profile, transactions 
               <div className={`metric-icon ${m.color} ${m.bgColor}`}>
                 <m.icon className="w-4 h-4" />
               </div>
-              <p className="text-white/40 text-[10px] font-medium uppercase tracking-wider">{m.label}</p>
+              <p className="text-nudge-secondary-text text-[10px] font-medium uppercase tracking-wider">{m.label}</p>
             </div>
             <h3 className="text-xl font-bold">{m.value}</h3>
           </motion.div>
@@ -202,7 +202,7 @@ const DashboardView = React.memo(function DashboardView({ profile, transactions 
               <TrendingUp className="w-3.5 h-3.5 text-accent-400" />
               Spending Trend
             </h3>
-            <span className="text-[9px] text-white/20 uppercase tracking-widest font-bold">Last 7 Days</span>
+            <span className="text-[9px] text-nudge-primary-text/20 uppercase tracking-widest font-bold">Last 7 Days</span>
           </div>
           <div className="flex-1 min-h-0 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -251,7 +251,7 @@ const DashboardView = React.memo(function DashboardView({ profile, transactions 
               <PieChartIcon className="w-3.5 h-3.5 text-purple-400" />
               Expense Breakdown
             </h3>
-            <span className="text-[9px] text-white/20 uppercase tracking-widest font-bold">By Category</span>
+            <span className="text-[9px] text-nudge-primary-text/20 uppercase tracking-widest font-bold">By Category</span>
           </div>
           <div className="flex-1 min-h-0 w-full">
             <ResponsiveContainer width="100%" height="100%">

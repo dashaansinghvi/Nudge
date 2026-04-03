@@ -88,14 +88,14 @@ export default function Onboarding({ user, onComplete, initialData }: Props) {
   if (initialData) {
     // Show finishing state immediately if they are coming from the landing page test
     return (
-      <div className="min-h-screen bg-nudge-primary text-nudge-primary flex items-center justify-center p-4">
+      <div className="min-h-screen bg-nudge-primary text-nudge-primary-text flex items-center justify-center p-4">
         <FinishingScreen />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-nudge-primary text-nudge-primary flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-nudge-primary text-nudge-primary-text flex flex-col items-center justify-center p-4">
       {isFinishing ? (
         <FinishingScreen />
       ) : (
@@ -121,7 +121,7 @@ function FinishingScreen() {
         className="w-20 h-20 border-4 border-accent-500 border-t-transparent rounded-full mx-auto mb-8"
       />
       <h2 className="text-3xl font-bold mb-4 tracking-tight">Setting up your Nudge vault...</h2>
-      <p className="text-nudge-secondary">We're analyzing your goals and securing your data.</p>
+      <p className="text-nudge-secondary-text">We're analyzing your goals and securing your data.</p>
     </motion.div>
   );
 }

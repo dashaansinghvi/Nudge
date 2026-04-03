@@ -169,7 +169,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
             <ShieldAlert className="w-7 h-7 text-rose-500" />
             Fraud Detection
           </h1>
-          <p className="text-gray-500 text-xs mt-0.5">Real-time security monitoring and threat analysis.</p>
+          <p className="text-nudge-secondary-text text-xs mt-0.5">Real-time security monitoring and threat analysis.</p>
         </div>
         <button 
           onClick={handleScan}
@@ -185,12 +185,12 @@ export default function FraudDetection({ profile, transactions }: Props) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
         <div className="card-glass p-3.5">
           <div className="flex items-center gap-2.5 mb-1.5">
-            <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center">
+            <div className="w-7 h-7 bg-nudge-inverse/10 rounded-lg flex items-center justify-center">
               <Activity className="w-4 h-4 text-accent-400" />
             </div>
-            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Live</span>
+            <span className="text-[9px] font-bold text-nudge-secondary-text uppercase tracking-widest">Live</span>
           </div>
-          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Total Scanned</p>
+          <p className="text-nudge-secondary-text text-[10px] font-bold uppercase tracking-widest">Total Scanned</p>
           <h3 className="text-xl font-bold">{fraudData.length}</h3>
         </div>
 
@@ -201,17 +201,17 @@ export default function FraudDetection({ profile, transactions }: Props) {
             </div>
             {suspiciousCount > 0 && <span className="flex h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />}
           </div>
-          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Suspicious</p>
-          <h3 className={cn("text-xl font-bold", suspiciousCount > 0 ? "text-rose-500" : "text-white")}>{suspiciousCount}</h3>
+          <p className="text-nudge-secondary-text text-[10px] font-bold uppercase tracking-widest">Suspicious</p>
+          <h3 className={cn("text-xl font-bold", suspiciousCount > 0 ? "text-rose-500" : "text-nudge-primary-text")}>{suspiciousCount}</h3>
         </div>
 
         <div className="card-glass p-3.5">
           <div className="flex items-center gap-2.5 mb-1.5">
-            <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center">
+            <div className="w-7 h-7 bg-nudge-inverse/10 rounded-lg flex items-center justify-center">
               <TrendingUp className="w-4 h-4 text-emerald-400" />
             </div>
           </div>
-          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Risk Level</p>
+          <p className="text-nudge-secondary-text text-[10px] font-bold uppercase tracking-widest">Risk Level</p>
           <h3 className={cn(
             "text-xl font-bold",
             riskLevel === 'High' ? "text-rose-500" : riskLevel === 'Medium' ? "text-amber-500" : "text-emerald-500"
@@ -220,11 +220,11 @@ export default function FraudDetection({ profile, transactions }: Props) {
 
         <div className="card-glass p-3.5">
           <div className="flex items-center gap-2.5 mb-1.5">
-            <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center">
-              <Clock className="w-4 h-4 text-gray-400" />
+            <div className="w-7 h-7 bg-nudge-inverse/10 rounded-lg flex items-center justify-center">
+              <Clock className="w-4 h-4 text-nudge-secondary-text" />
             </div>
           </div>
-          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Last Scan</p>
+          <p className="text-nudge-secondary-text text-[10px] font-bold uppercase tracking-widest">Last Scan</p>
           <h3 className="text-base font-bold">{lastScanTime || 'Never'}</h3>
         </div>
       </div>
@@ -233,19 +233,19 @@ export default function FraudDetection({ profile, transactions }: Props) {
         {/* Risk Analysis Table */}
         <div className="lg:col-span-2 flex flex-col min-h-0">
           <div className="card-glass flex flex-col flex-1 min-h-0 overflow-hidden">
-            <div className="p-4 border-b border-white/5 flex items-center justify-between flex-shrink-0">
+            <div className="p-4 border-b border-nudge-border flex items-center justify-between flex-shrink-0">
               <h3 className="text-sm font-bold flex items-center gap-2">
                 <Activity className="w-4 h-4 text-accent-400" />
                 Risk Analysis
               </h3>
-              <div className="flex bg-white/5 p-0.5 rounded-lg border border-white/10">
+              <div className="flex bg-nudge-inverse/10 p-0.5 rounded-lg border border-nudge-border">
                 {(['all', 'suspicious'] as const).map((f) => (
                   <button
                     key={f}
                     onClick={() => setActiveFilter(f)}
                     className={cn(
                       "px-3 py-1.5 rounded-md text-xs font-medium transition-all",
-                      activeFilter === f ? "bg-action text-white shadow" : "text-gray-500 hover:text-gray-300"
+                      activeFilter === f ? "bg-action text-nudge-primary-text shadow" : "text-nudge-secondary-text hover:text-nudge-secondary-text"
                     )}
                   >
                     {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -256,7 +256,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
             <div className="overflow-y-auto flex-1 min-h-0">
               <table className="w-full text-left">
                 <thead className="sticky top-0 bg-nudge-primary z-10">
-                  <tr className="text-gray-500 text-[10px] uppercase tracking-widest border-b border-white/5">
+                  <tr className="text-nudge-secondary-text text-[10px] uppercase tracking-widest border-b border-nudge-border">
                     <th className="px-4 py-2.5 font-bold">Merchant / Location</th>
                     <th className="px-4 py-2.5 font-bold">Amount</th>
                     <th className="px-4 py-2.5 font-bold">Risk</th>
@@ -268,13 +268,13 @@ export default function FraudDetection({ profile, transactions }: Props) {
                     <tr 
                       key={tx.id} 
                       className={cn(
-                        "hover:bg-white/5 transition-all group",
+                        "hover:bg-nudge-inverse/10 transition-all group",
                         tx.status === 'Suspicious' ? "bg-rose-500/5" : ""
                       )}
                     >
                       <td className="px-4 py-2.5">
                         <div className="font-bold text-xs">{tx.name}</div>
-                        <div className="flex items-center gap-1 text-[10px] text-gray-500 mt-0.5">
+                        <div className="flex items-center gap-1 text-[10px] text-nudge-secondary-text mt-0.5">
                           <MapPin className="w-2.5 h-2.5" />
                           {tx.location}
                         </div>
@@ -284,7 +284,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
                       </td>
                       <td className="px-4 py-2.5">
                         <div className="flex items-center gap-2">
-                          <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden max-w-[40px]">
+                          <div className="flex-1 h-1 bg-nudge-inverse/10 rounded-full overflow-hidden max-w-[40px]">
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${tx.riskScore}%` }}
@@ -306,7 +306,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
                         <span className={cn(
                           "px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-tighter",
                           tx.status === 'Suspicious' ? "bg-rose-500/20 text-rose-500" : 
-                          tx.status === 'Reported' ? "bg-rose-600 text-white" :
+                          tx.status === 'Reported' ? "bg-rose-600 text-nudge-primary-text" :
                           "bg-emerald-500/20 text-emerald-500"
                         )}>
                           {tx.status}
@@ -341,14 +341,14 @@ export default function FraudDetection({ profile, transactions }: Props) {
                     <div className="flex items-start justify-between">
                       <div>
                         <h4 className="font-bold text-xs text-rose-500">Suspicious Activity</h4>
-                        <p className="text-[10px] text-gray-400 mt-0.5">{tx.reason}</p>
+                        <p className="text-[10px] text-nudge-secondary-text mt-0.5">{tx.reason}</p>
                       </div>
                       <span className="text-[10px] font-bold text-rose-500">{formatCurrency(Math.abs(tx.amount))}</span>
                     </div>
                     <div className="flex gap-1.5">
                       <button 
                         onClick={() => handleMarkSafe(tx.id)}
-                        className="flex-1 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-[10px] font-bold transition-all"
+                        className="flex-1 py-1.5 bg-nudge-inverse/10 hover:bg-nudge-inverse/10 rounded-lg text-[10px] font-bold transition-all"
                       >
                         Mark Safe
                       </button>
@@ -363,7 +363,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
                 ))}
               </AnimatePresence>
               {suspiciousCount === 0 && (
-                <div className="text-center py-6 text-gray-500">
+                <div className="text-center py-6 text-nudge-secondary-text">
                   <ShieldCheck className="w-8 h-8 mx-auto mb-2 opacity-10" />
                   <p className="text-xs">No active alerts.</p>
                 </div>
@@ -381,7 +381,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
               <button 
                 onClick={generateAIInsights}
                 disabled={isGeneratingInsights}
-                className="p-1.5 hover:bg-white/10 rounded-lg transition-all disabled:opacity-50"
+                className="p-1.5 hover:bg-nudge-inverse/10 rounded-lg transition-all disabled:opacity-50"
               >
                 {isGeneratingInsights ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
               </button>
@@ -392,7 +392,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
                   key={idx}
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-xs leading-relaxed"
+                  className="p-2.5 bg-nudge-inverse/10 border border-nudge-border rounded-xl text-xs leading-relaxed"
                 >
                   {insight}
                 </motion.div>
@@ -400,7 +400,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
               {aiInsights.length === 0 && !isGeneratingInsights && (
                 <button 
                   onClick={generateAIInsights}
-                  className="w-full py-3 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-gray-400 hover:bg-white/10 transition-all"
+                  className="w-full py-3 bg-nudge-inverse/10 border border-nudge-border rounded-xl text-xs font-bold text-nudge-secondary-text hover:bg-nudge-inverse/10 transition-all"
                 >
                   Generate Insights
                 </button>
@@ -411,7 +411,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
           {/* Security Controls */}
           <div className="card-glass p-4 flex-shrink-0">
             <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-gray-400" />
+              <Lock className="w-4 h-4 text-nudge-secondary-text" />
               Security Controls
             </h3>
             <div className="space-y-1.5">
@@ -422,7 +422,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
                 }}
                 className={cn(
                   "w-full flex items-center justify-between p-3 rounded-xl transition-all group text-sm",
-                  isAccountFrozen ? "bg-rose-600 text-white" : "bg-white/5 border border-white/10 hover:bg-white/10"
+                  isAccountFrozen ? "bg-rose-600 text-nudge-primary-text" : "bg-nudge-inverse/10 border border-nudge-border hover:bg-nudge-inverse/10"
                 )}
               >
                 <div className="flex items-center gap-2">
@@ -438,7 +438,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
                 }}
                 className={cn(
                   "w-full flex items-center justify-between p-3 rounded-xl transition-all group text-sm",
-                  isCardBlocked ? "bg-rose-600 text-white" : "bg-white/5 border border-white/10 hover:bg-white/10"
+                  isCardBlocked ? "bg-rose-600 text-nudge-primary-text" : "bg-nudge-inverse/10 border border-nudge-border hover:bg-nudge-inverse/10"
                 )}
               >
                 <div className="flex items-center gap-2">

@@ -74,7 +74,7 @@ export default function NudgeLogo({
         {/* ── Wordmark ── */}
         {!iconOnly && (
           <span
-            className={`font-bold tracking-tight text-white flex items-center gap-0.5 ${textSize}`}
+            className={`font-bold tracking-tight text-nudge-primary-text flex items-center gap-0.5 ${textSize}`}
             style={{ fontFamily: "'Outfit', 'Inter', sans-serif", letterSpacing: '-0.02em' }}
           >
             <span>Nudg</span>

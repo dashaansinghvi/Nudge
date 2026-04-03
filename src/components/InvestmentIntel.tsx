@@ -173,8 +173,10 @@ export default function InvestmentIntel({ profile }: Props) {
   const handleCalculate = () => {
     setIsCalculating(true);
     setTimeout(() => {
-      const p = parseFloat(calcAmount);
-      const t = parseFloat(calcDuration);
+      const p = Math.max(0, parseFloat(calcAmount) || 0);
+      let t = Math.max(1, parseInt(calcDuration) || 5);
+      if (t > 50) t = 50; // Cap projection years for performance stability
+      
       const r = 0.12; // Assume 12% return for illustration
       const futureValue = p * Math.pow(1 + r, t);
       
@@ -231,61 +233,58 @@ export default function InvestmentIntel({ profile }: Props) {
       {/* Compact Header */}
       <header className="flex items-center justify-between flex-shrink-0">
         <div>
-          <h1 className="text-xl font-bold tracking-tight mb-0.5 flex items-center gap-2 text-nudge-primary">
-            <Briefcase className="w-5 h-5 text-accent-500" />
-            Investment Intelligence
-          </h1>
-          <p className="text-gray-500 text-xs text-left">AI-powered advisor for maximum returns with controlled risk.</p>
+          <h1 className="text-2xl font-bold tracking-tight mb-0.5">Investment Intelligence</h1>
+          <p className="text-nudge-secondary-text text-xs">AI-powered advisor for maximum returns with controlled risk.</p>
         </div>
       </header>
 
       {/* Top Input Row */}
       <div className="flex gap-3 flex-shrink-0">
         {/* Profile Settings */}
-        <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 backdrop-blur-md flex flex-col justify-center">
+        <div className="card-glass flex-1 p-4 flex flex-col justify-center">
             <div className="flex items-center gap-3 w-full">
               <div className="flex-1 text-xs">
-                <label className="text-[9px] text-gray-500 uppercase font-bold mb-1 block">Budget (Mo)</label>
-                <input type="number" value={budget} onChange={e => setBudget(e.target.value)} onBlur={handleAnalyze} className="w-full bg-white/5 border border-white/10 rounded-md px-2 py-1.5 focus:border-accent-500" />
+                <label className="text-[10px] text-nudge-secondary-text uppercase font-bold mb-1 block">Budget (Mo)</label>
+                <input type="number" value={budget} onChange={e => setBudget(e.target.value)} onBlur={handleAnalyze} className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-md px-2 py-1.5 focus:border-accent-500" />
               </div>
               <div className="flex-1 text-xs">
-                <label className="text-[9px] text-gray-500 uppercase font-bold mb-1 block">Risk</label>
-                <input type="range" min="1" max="3" step="1" value={risk} onChange={(e) => {setRisk(parseInt(e.target.value)); handleAnalyze();}} className="w-full accent-accent-500 h-1 bg-white/10 rounded-lg appearance-none mt-2" />
-                <div className="flex justify-between text-[8px] text-gray-500 mt-1">
+                <label className="text-[10px] text-nudge-secondary-text uppercase font-bold mb-1 block">Risk</label>
+                <input type="range" min="1" max="3" step="1" value={risk} onChange={(e) => {setRisk(parseInt(e.target.value)); handleAnalyze();}} className="w-full accent-accent-500 h-1 bg-nudge-inverse/10 rounded-lg appearance-none mt-2" />
+                <div className="flex justify-between text-[8px] text-nudge-secondary-text mt-1">
                   <span>Low</span><span>Med</span><span>High</span>
                 </div>
               </div>
               <div className="flex-1 text-xs">
-                <label className="text-[9px] text-gray-500 uppercase font-bold mb-1 block">Goal</label>
-                <select value={goal} onChange={e => setGoal(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-md px-2 py-1.5 focus:border-accent-500 text-white">
+                <label className="text-[10px] text-nudge-secondary-text uppercase font-bold mb-1 block">Goal</label>
+                <select value={goal} onChange={e => setGoal(e.target.value)} className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-md px-2 py-1.5 focus:border-accent-500 text-nudge-primary-text">
                   <option className="bg-[#111]">Short-term (1-3 yrs)</option>
                   <option className="bg-[#111]">Long-term (5+ yrs)</option>
                   <option className="bg-[#111]">Wealth growth</option>
                 </select>
               </div>
-              <button disabled={isAnalyzing} onClick={handleAnalyze} className="mt-4 px-3 py-1.5 bg-action text-white rounded text-xs font-bold disabled:opacity-50 flex items-center justify-center">
-                {isAnalyzing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+              <button disabled={isAnalyzing} onClick={handleAnalyze} className="mt-4 px-3 py-1.5 bg-action text-white rounded text-sm font-bold disabled:opacity-50 flex items-center justify-center">
+                {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
               </button>
             </div>
         </div>
 
         {/* Growth Calculator Mini */}
-        <div className="flex-1 bg-gradient-to-br from-accent-600/10 to-purple-600/10 border border-accent-500/10 rounded-xl p-3 flex flex-col justify-center">
+        <div className="card-glass flex-1 bg-gradient-to-br from-accent-600/10 to-purple-600/10 border-accent-500/10 p-4 flex flex-col justify-center">
           <div className="flex items-center gap-3">
              <div className="flex-1 text-xs">
-                <label className="text-[9px] text-gray-500 uppercase font-bold mb-1 block">Initial (P)</label>
-                <input type="number" value={calcAmount} onChange={e => setCalcAmount(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-md px-2 py-1.5 focus:border-accent-500" />
+                <label className="text-[10px] text-nudge-secondary-text uppercase font-bold mb-1 block">Initial (P)</label>
+                <input type="number" value={calcAmount} onChange={e => setCalcAmount(e.target.value)} className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-md px-2 py-1.5 focus:border-accent-500" />
              </div>
              <div className="flex-[0.5] text-xs">
-                <label className="text-[9px] text-gray-500 uppercase font-bold mb-1 block">Years</label>
-                <input type="number" value={calcDuration} onChange={e => setCalcDuration(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-md px-2 py-1.5 focus:border-accent-500" />
+                <label className="text-[10px] text-nudge-secondary-text uppercase font-bold mb-1 block">Years</label>
+                <input type="number" value={calcDuration} onChange={e => setCalcDuration(e.target.value)} className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-md px-2 py-1.5 focus:border-accent-500" />
              </div>
-             <button disabled={isCalculating} onClick={handleCalculate} className="mt-4 px-3 py-1.5 bg-white/10 text-white rounded text-xs font-bold hover:bg-white/20 transition">
-                {isCalculating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Project"}
+             <button disabled={isCalculating} onClick={handleCalculate} className="mt-4 px-3 py-1.5 bg-nudge-inverse/10 text-nudge-primary-text rounded text-sm font-bold hover:bg-nudge-inverse/20 transition">
+                {isCalculating ? <Loader2 className="w-4 h-4 animate-spin" /> : "Project"}
              </button>
              {calcResult && (
                <div className="flex-[1.5] text-right mt-3">
-                 <p className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest">Future Value</p>
+                 <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">Future Value</p>
                  <p className="text-sm font-bold">{formatCurrency(calcResult.futureValue)}</p>
                </div>
              )}
@@ -297,14 +296,14 @@ export default function InvestmentIntel({ profile }: Props) {
       <div className="flex-1 min-h-0 flex gap-3">
         {/* Left: Recommendations Table & Allocation */}
         <div className="flex-[5.5] flex flex-col gap-3 min-h-0">
-          <div className="flex-[1.5] bg-white/[0.02] border border-white/[0.05] rounded-xl flex flex-col overflow-hidden backdrop-blur-md">
-            <div className="p-3 border-b border-white/5 bg-[#0a0a0a] flex items-center justify-between sticky top-0 z-10">
-              <h3 className="text-xs font-bold flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-accent-400" /> AI Recommendations</h3>
-              {isAnalyzing && <span className="text-[10px] text-gray-500 animate-pulse">Analyzing profile...</span>}
+          <div className="card-glass flex-1 flex flex-col overflow-hidden relative">
+            <div className="p-3 border-b border-nudge-border bg-[#0a0a0a] flex items-center justify-between sticky top-0 z-10">
+              <h3 className="text-sm font-bold flex items-center gap-1.5"><Sparkles className="w-4 h-4 text-accent-400" /> AI Recommendations</h3>
+              {isAnalyzing && <span className="text-[10px] text-nudge-secondary-text animate-pulse">Analyzing profile...</span>}
             </div>
             <div className="flex-1 overflow-y-auto w-full">
               <table className="w-full text-left">
-                <thead className="bg-[#0a0a0a]/50 text-white/50 text-[9px] uppercase tracking-widest border-b border-white/5">
+                <thead className="bg-[#0a0a0a]/50 text-nudge-secondary-text text-[10px] uppercase tracking-widest border-b border-nudge-border">
                   <tr>
                     <th className="px-3 py-2 font-bold">Asset Class</th>
                     <th className="px-3 py-2 font-bold">Return</th>
@@ -316,23 +315,23 @@ export default function InvestmentIntel({ profile }: Props) {
                   {recommendations?.map((rec, idx) => (
                     <tr key={idx} className="hover:bg-white/[0.02]">
                       <td className="px-3 py-2">
-                        <div className="flex items-center gap-1.5 text-xs font-bold">
+                        <div className="flex items-center gap-1.5 text-sm font-bold">
                           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: rec.color }} />
                           {rec.asset}
                         </div>
-                        <div className="text-[9px] text-gray-500 ml-3.5">{rec.duration}</div>
+                        <div className="text-[10px] text-nudge-secondary-text ml-3.5">{rec.duration}</div>
                       </td>
-                      <td className="px-3 py-2 text-xs font-bold text-emerald-400">{rec.returnRate}</td>
+                      <td className="px-3 py-2 text-sm font-bold text-emerald-400">{rec.returnRate}</td>
                       <td className="px-3 py-2">
-                        <span className={cn("px-1.5 py-0.5 rounded text-[9px] border", rec.risk.includes('Low') ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : rec.risk.includes('High') ? "bg-rose-500/10 border-rose-500/20 text-rose-400" : "bg-amber-500/10 border-amber-500/20 text-amber-400")}>
+                        <span className={cn("px-1.5 py-0.5 rounded text-[10px] border", rec.risk.includes('Low') ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : rec.risk.includes('High') ? "bg-rose-500/10 border-rose-500/20 text-rose-400" : "bg-amber-500/10 border-amber-500/20 text-amber-400")}>
                           {rec.risk}
                         </span>
                       </td>
-                      <td className="px-3 py-2 text-xs font-bold">{rec.allocation}%</td>
+                      <td className="px-3 py-2 text-sm font-bold">{rec.allocation}%</td>
                     </tr>
                   ))}
                   {!recommendations && (
-                    <tr><td colSpan={4} className="px-3 py-8 text-center text-xs text-gray-500 border-b-0">Adjust profile to see recommendations</td></tr>
+                    <tr><td colSpan={4} className="px-3 py-8 text-center text-xs text-nudge-secondary-text border-b-0">Adjust profile to see recommendations</td></tr>
                   )}
                 </tbody>
               </table>
@@ -342,10 +341,10 @@ export default function InvestmentIntel({ profile }: Props) {
           {/* Allocation & Trends Row inside Left column */}
           <div className="flex-1 flex gap-3 min-h-0">
              <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl flex flex-col min-h-0 p-3">
-                <h3 className="text-xs font-bold flex items-center gap-1.5 mb-2"><PieChartIcon className="w-3.5 h-3.5" /> Ideal Allocation</h3>
+                <h3 className="text-sm font-bold flex items-center gap-1.5 mb-2"><PieChartIcon className="w-4 h-4" /> Ideal Allocation</h3>
                 <div className="flex-1 min-h-0 relative">
                   {!allocation ? (
-                     <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-500">No data</div>
+                     <div className="absolute inset-0 flex items-center justify-center text-xs text-nudge-secondary-text">No data</div>
                   ) : (
                      <ResponsiveContainer width="100%" height="100%">
                        <PieChart>
@@ -362,22 +361,22 @@ export default function InvestmentIntel({ profile }: Props) {
              </div>
              <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl flex flex-col min-h-0 p-3">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xs font-bold flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5" /> Market Trends</h3>
-                  <button onClick={handleFetchTrends} disabled={isFetchingTrends} className="text-gray-500 hover:text-white">
+                  <h3 className="text-sm font-bold flex items-center gap-1.5"><TrendingUp className="w-4 h-4" /> Market Trends</h3>
+                  <button onClick={handleFetchTrends} disabled={isFetchingTrends} className="text-nudge-secondary-text hover:text-nudge-primary-text">
                     <RefreshCw className={cn("w-3 h-3", isFetchingTrends && "animate-spin")} />
                   </button>
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-2">
                   {marketTrends ? marketTrends.map((t, idx) => (
-                    <div key={idx} className="p-2 border border-white/5 rounded-lg bg-white/[0.02]">
+                    <div key={idx} className="p-2 border border-nudge-border rounded-lg bg-white/[0.02]">
                       <div className="flex items-center justify-between mb-0.5">
                         <span className="text-[10px] font-bold">{t.title}</span>
-                        {t.trend === 'up' ? <TrendingUp className="w-3 h-3 text-emerald-400" /> : t.trend === 'down' ? <Activity className="w-3 h-3 text-rose-400" /> : <LineChartIcon className="w-3 h-3 text-gray-400" />}
+                        {t.trend === 'up' ? <TrendingUp className="w-3 h-3 text-emerald-400" /> : t.trend === 'down' ? <Activity className="w-3 h-3 text-rose-400" /> : <LineChartIcon className="w-3 h-3 text-nudge-secondary-text" />}
                       </div>
-                      <p className="text-[9px] text-gray-400 leading-tight">{t.desc}</p>
+                      <p className="text-[10px] text-nudge-secondary-text leading-tight">{t.desc}</p>
                     </div>
                   )) : (
-                    <div className="text-center text-[10px] text-gray-500 py-4">Hit refresh to load trends.</div>
+                    <div className="text-center text-[10px] text-nudge-secondary-text py-4">Hit refresh to load trends.</div>
                   )}
                 </div>
              </div>
@@ -400,7 +399,7 @@ export default function InvestmentIntel({ profile }: Props) {
                           <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
                         </linearGradient>
                       </defs>
-                      <Tooltip contentStyle={{ backgroundColor: '#111', borderColor: '#333', fontSize: '10px', borderRadius: '4px' }} cursor={{ stroke: '#ffffff20' }} />
+                      <RechartsTooltip contentStyle={{ backgroundColor: '#111', borderColor: '#333', fontSize: '10px', borderRadius: '4px' }} cursor={{ stroke: '#ffffff20' }} />
                       <Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -409,32 +408,32 @@ export default function InvestmentIntel({ profile }: Props) {
           )}
 
           {/* Chat Container */}
-          <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl flex flex-col overflow-hidden min-h-0 backdrop-blur-md">
-             <div className="p-3 border-b border-white/5 bg-accent-600/5 flex items-center gap-2 flex-shrink-0">
+          <div className="card-glass flex-1 flex flex-col overflow-hidden min-h-0">
+             <div className="p-3 border-b border-nudge-border bg-accent-600/5 flex items-center gap-2 flex-shrink-0">
                 <div className="w-6 h-6 bg-action rounded text-white flex items-center justify-center">
                   <MessageSquare className="w-3 h-3" />
                 </div>
-                <h3 className="text-xs font-bold text-white">Investment AI Advisor</h3>
+                <h3 className="text-sm font-bold text-nudge-primary-text">Investment AI Advisor</h3>
              </div>
              
              <div className="flex-1 overflow-y-auto p-3 space-y-3">
                 {chatHistory.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[90%] p-2text-[11px] leading-relaxed ${msg.role === 'user' ? 'bg-action text-white rounded-xl rounded-br-sm p-2.5' : 'bg-white/5 border border-white/10 text-gray-300 rounded-xl rounded-bl-sm p-3'}`}>
+                    <div className={`max-w-[90%] p-2text-xs leading-relaxed ${msg.role === 'user' ? 'bg-action text-nudge-primary-text rounded-xl rounded-br-sm p-2.5' : 'bg-nudge-inverse/10 border border-nudge-border text-nudge-secondary-text rounded-xl rounded-bl-sm p-3'}`}>
                       <div className="whitespace-pre-wrap">{msg.text}</div>
                     </div>
                   </div>
                 ))}
              </div>
             
-             <form onSubmit={handleChat} className="p-2 border-t border-white/5 flex-shrink-0 bg-[#0a0a0a]">
+             <form onSubmit={handleChat} className="p-2 border-t border-nudge-border flex-shrink-0 bg-[#0a0a0a]">
                 <div className="relative">
                   <input 
                     type="text" 
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
                     placeholder="Ask for investment advice..."
-                    className="w-full bg-white/5 border border-white/10 rounded py-2 pl-2.5 pr-8 focus:outline-none focus:border-accent-500 text-[11px] text-white"
+                    className="w-full bg-nudge-inverse/10 border border-nudge-border rounded py-2 pl-2.5 pr-8 focus:outline-none focus:border-accent-500 text-xs text-nudge-primary-text"
                   />
                   <button type="submit" className="absolute right-1 top-1 bottom-1 px-1.5 text-accent-400 hover:bg-accent-500/20 rounded flex items-center justify-center transition-all">
                     <ArrowRight className="w-3 h-3" />
@@ -448,7 +447,7 @@ export default function InvestmentIntel({ profile }: Props) {
       <div className="fixed bottom-6 right-6 z-[200] space-y-2 pointer-events-none">
         <AnimatePresence>
           {toasts.map((toast) => (
-            <motion.div key={toast.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className={cn("pointer-events-auto px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 min-w-[200px] backdrop-blur-xl border text-[11px]", toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" : toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" : "bg-accent-500/20 border-accent-500/20 text-accent-400")}>
+            <motion.div key={toast.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className={cn("pointer-events-auto px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 min-w-[200px] backdrop-blur-xl border text-xs", toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" : toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" : "bg-accent-500/20 border-accent-500/20 text-accent-400")}>
               {toast.type === 'success' ? <Check className="w-3 h-3" /> : toast.type === 'error' ? <X className="w-3 h-3" /> : <Info className="w-3 h-3" />}
               <span className="font-bold">{toast.message}</span>
             </motion.div>

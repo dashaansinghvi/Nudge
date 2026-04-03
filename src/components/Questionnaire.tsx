@@ -251,9 +251,9 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
       <div className="flex items-center gap-4 mb-12">
         <button 
           onClick={currentStep === 0 ? onCancel : handlePrevStep}
-          className="p-2 hover:bg-white/10 rounded-xl transition-all mr-2 group flex-shrink-0"
+          className="p-2 hover:bg-nudge-inverse/10 rounded-xl transition-all mr-2 group flex-shrink-0"
         >
-          <ArrowLeft className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+          <ArrowLeft className="w-5 h-5 text-nudge-secondary-text group-hover:text-nudge-primary-text transition-colors" />
         </button>
 
         <div className="flex flex-1 items-center gap-2">
@@ -261,7 +261,7 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
             <div 
               key={idx}
               className={`h-1.5 flex-1 rounded-full transition-all duration-500 ease-out ${
-                idx <= currentStep ? 'bg-accent-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'bg-white/10'
+                idx <= currentStep ? 'bg-accent-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'bg-nudge-inverse/10'
               }`}
             />
           ))}
@@ -280,7 +280,7 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
             className="flex flex-col min-h-[300px]"
           >
             <div>
-              <h2 className="text-4xl font-bold tracking-tight mb-3 leading-tight text-white">
+              <h2 className="text-4xl font-bold tracking-tight mb-3 leading-tight text-nudge-primary-text">
                 {currentQ.title}
               </h2>
               <p className="text-lg text-accent-200/60 mb-10">
@@ -299,15 +299,15 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
                       className={`p-6 border rounded-3xl text-left transition-all group flex items-center justify-between ${
                         isSelected 
                           ? 'bg-accent-600/20 border-accent-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
-                          : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-accent-500/50'
+                          : 'bg-nudge-inverse/10 border-nudge-border hover:bg-nudge-inverse/10 hover:border-accent-500/50'
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        {option.icon && <option.icon className={`w-6 h-6 ${isSelected ? 'text-accent-400' : 'text-gray-400 group-hover:text-accent-400'} transition-colors`} />}
-                        <span className="text-xl font-medium text-white">{option.label}</span>
+                        {option.icon && <option.icon className={`w-6 h-6 ${isSelected ? 'text-accent-400' : 'text-nudge-secondary-text group-hover:text-accent-400'} transition-colors`} />}
+                        <span className="text-xl font-medium text-nudge-primary-text">{option.label}</span>
                       </div>
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                         isSelected ? 'border-accent-500' : 'border-white/20 group-hover:border-accent-500/50'
+                         isSelected ? 'border-accent-500' : 'border-nudge-border group-hover:border-accent-500/50'
                       }`}>
                         {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-accent-500" />}
                       </div>
@@ -324,7 +324,7 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
                   placeholder={currentQ.placeholder}
                   value={answers[currentQ.id] || ''}
                   onChange={(e) => setAnswers(prev => ({ ...prev, [currentQ.id]: e.target.value }))}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-accent-500/50 focus:border-accent-500/50 transition-all font-medium"
+                  className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-2xl px-6 py-5 text-xl text-nudge-primary-text placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-accent-500/50 focus:border-accent-500/50 transition-all font-medium"
                   autoFocus
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -352,7 +352,7 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
                       <div className="relative" ref={currencyRef}>
                         <button
                           onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
-                          className="text-4xl text-accent-400 font-bold hover:text-accent-300 transition-colors bg-white/5 px-4 py-2 rounded-2xl border border-white/10 hover:border-accent-500/50 group flex items-center gap-2"
+                          className="text-4xl text-accent-400 font-bold hover:text-accent-300 transition-colors bg-nudge-inverse/10 px-4 py-2 rounded-2xl border border-nudge-border hover:border-accent-500/50 group flex items-center gap-2"
                         >
                           {currentSymbol}
                           <div className="w-2 h-2 rounded-full bg-accent-500 group-hover:animate-ping" />
@@ -364,7 +364,7 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
                               initial={{ opacity: 0, scale: 0.95 }}
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.95 }}
-                              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-2 grid grid-cols-4 gap-1 w-64 z-[110]"
+                              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 bg-slate-900 border border-nudge-border rounded-2xl shadow-2xl p-2 grid grid-cols-4 gap-1 w-64 z-[110]"
                             >
                               {CURRENCIES.map(curr => (
                                 <button
@@ -375,8 +375,8 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
                                   }}
                                   className={`p-2 rounded-lg text-xs font-bold transition-all text-center ${
                                     selectedCurrency === curr.value 
-                                      ? 'bg-accent-600 text-white' 
-                                      : 'text-white/50 hover:bg-white/10 hover:text-white'
+                                      ? 'bg-accent-600 text-nudge-primary-text' 
+                                      : 'text-nudge-secondary-text hover:bg-nudge-inverse/10 hover:text-nudge-primary-text'
                                   }`}
                                 >
                                   {curr.symbol}
@@ -394,18 +394,18 @@ export default function Questionnaire({ onComplete, isTestMode = false, onCancel
                         inputMode="numeric"
                         value={sliderValue === 0 ? '' : new Intl.NumberFormat('en-US').format(sliderValue)}
                         onChange={handleInputChange}
-                        className="w-full bg-transparent text-white text-7xl font-bold tracking-tighter text-center focus:outline-none placeholder-white/10 caret-accent-500"
+                        className="w-full bg-transparent text-nudge-primary-text text-7xl font-bold tracking-tighter text-center focus:outline-none placeholder-white/10 caret-accent-500"
                         placeholder="0"
                         autoFocus
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') handleSliderConfirm();
                         }}
                       />
-                      <div className="absolute -bottom-2 left-0 right-0 h-px bg-white/10 group-focus-within:bg-accent-500/50 transition-colors" />
+                      <div className="absolute -bottom-2 left-0 right-0 h-px bg-nudge-inverse/10 group-focus-within:bg-accent-500/50 transition-colors" />
                     </div>
                   </div>
 
-                  <div className="flex justify-between px-2 text-[10px] font-bold text-white/20 uppercase tracking-widest">
+                  <div className="flex justify-between px-2 text-[10px] font-bold text-nudge-primary-text/20 uppercase tracking-widest">
                     <span>min: {currentQ.prefix}{currentQ.min}</span>
                     <span>max: {currentQ.prefix}{currentQ.max}+</span>
                   </div>

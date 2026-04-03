@@ -64,7 +64,7 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
           >
             {timeOfDay}, <span className="text-accent-500">{profile.name.split(' ')[0]}</span>.
           </motion.h1>
-          <p className="text-gray-400 text-sm mt-0.5">Your financial ecosystem is breathing. Ready for today's nudges?</p>
+          <p className="text-nudge-secondary-text text-sm mt-0.5">Your financial ecosystem is breathing. Ready for today's nudges?</p>
         </div>
         
         <div className="flex items-center gap-2">
@@ -77,7 +77,7 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
           </button>
           <button 
             onClick={handleRefresh}
-            className="p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-gray-400"
+            className="p-2.5 bg-nudge-inverse/10 border border-nudge-border rounded-xl hover:bg-nudge-inverse/10 transition-all text-nudge-secondary-text"
           >
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
@@ -108,10 +108,10 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
                   <div className={`metric-icon ${m.color} ${m.bgColor}`}>
                     <m.icon className="w-4 h-4" />
                   </div>
-                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">{m.label}</p>
+                  <p className="text-nudge-secondary-text text-[10px] font-bold uppercase tracking-widest">{m.label}</p>
                 </div>
                 <h3 className="text-xl font-bold mb-0.5">{m.value}</h3>
-                <p className="text-[10px] text-white/30 font-medium">{m.desc}</p>
+                <p className="text-[10px] text-nudge-secondary-text font-medium">{m.desc}</p>
               </motion.div>
             ))}
           </section>
@@ -119,11 +119,11 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
           {/* Daily Nudges Feed */}
           <section className="flex-1 min-h-0 flex flex-col">
             <div className="flex items-center justify-between mb-3 flex-shrink-0">
-              <h2 className="text-sm font-bold flex items-center gap-2 text-white">
+              <h2 className="text-sm font-bold flex items-center gap-2 text-nudge-primary-text">
                 <Zap className="w-3.5 h-3.5 text-accent-400" />
                 Strategic Nudges
               </h2>
-              <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Updated Just Now</span>
+              <span className="text-[10px] text-nudge-secondary-text uppercase tracking-widest font-bold">Updated Just Now</span>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 min-h-0">
@@ -149,7 +149,7 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
                           <Zap className="w-3.5 h-3.5 text-accent-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-nudge-primary font-medium leading-snug text-xs mb-2">{insight}</p>
+                          <p className="text-nudge-primary-text font-medium leading-snug text-xs mb-2">{insight}</p>
                           <div className="flex items-center gap-2 text-[9px] font-bold text-accent-400 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300">
                             Execute Strategy <ArrowRight className="w-2.5 h-2.5" />
                           </div>
@@ -182,7 +182,7 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
                     stroke="currentColor"
                     strokeWidth="5"
                     fill="transparent"
-                    className="text-white/[0.04]"
+                    className="text-nudge-primary-text/[0.04]"
                   />
                   <motion.circle
                     cx="40" cy="40" r="35"
@@ -204,18 +204,18 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <span className="text-xl font-bold">{profile.vitality_score}</span>
-                  <span className="text-[7px] uppercase font-bold tracking-widest text-white/30">Score</span>
+                  <span className="text-[7px] uppercase font-bold tracking-widest text-nudge-secondary-text">Score</span>
                 </div>
               </div>
               
               <div className="flex-1">
                 <h3 className="text-sm font-bold mb-1">Financial Vitality</h3>
-                <p className="text-xs text-white/30 mb-3 leading-snug">
+                <p className="text-xs text-nudge-secondary-text mb-3 leading-snug">
                   Score rose by 4 pts this week. You're becoming more resilient.
                 </p>
                 <button 
                   onClick={() => onNavigate('dashboard')}
-                  className="w-full py-2 bg-white/[0.04] border border-white/[0.06] rounded-xl hover:bg-white/[0.08] transition-all text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 text-white/60 hover:text-white/80"
+                  className="w-full py-2 bg-white/[0.04] border border-white/[0.06] rounded-xl hover:bg-white/[0.08] transition-all text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 text-nudge-secondary-text hover:text-nudge-primary-text"
                 >
                   View Analytics <ArrowRight className="w-3 h-3" />
                 </button>
@@ -225,7 +225,7 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
 
           {/* Quick Actions */}
           <section className="flex flex-col gap-1.5 flex-1 min-h-0">
-            <h3 className="text-[10px] font-bold text-white/25 uppercase tracking-widest px-1 mb-1">Quick Actions</h3>
+            <h3 className="text-[10px] font-bold text-nudge-primary-text/25 uppercase tracking-widest px-1 mb-1">Quick Actions</h3>
             {[
               { action: () => onNavigate('expense-ai'), icon: Plus, label: 'Add New Expense', iconColor: 'text-accent-400', iconBg: 'bg-accent-500/8' },
               { action: () => onNavigate('bills'), icon: TrendingUp, label: 'Optimize Monthly Bills', iconColor: 'text-purple-400', iconBg: 'bg-purple-500/8' },
@@ -243,9 +243,9 @@ const Home = React.memo(function Home({ profile, transactions, onNavigate }: Pro
                   <div className={`metric-icon ${item.iconColor} ${item.iconBg}`}>
                     <item.icon className="w-3.5 h-3.5" />
                   </div>
-                  <span className="font-medium text-xs text-white/70 group-hover:text-white/90 transition-colors">{item.label}</span>
+                  <span className="font-medium text-xs text-nudge-primary-text group-hover:text-nudge-primary-text/90 transition-colors">{item.label}</span>
                 </div>
-                <ChevronRight className="w-3.5 h-3.5 text-white/15 group-hover:text-accent-400 transition-colors" />
+                <ChevronRight className="w-3.5 h-3.5 text-nudge-primary-text/15 group-hover:text-accent-400 transition-colors" />
               </motion.button>
             ))}
           </section>

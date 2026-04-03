@@ -364,7 +364,7 @@ export default function BillOptimizer({ profile }: Props) {
       case 'Internet': return <Wifi className="w-4 h-4 text-accent-400" />;
       case 'Subscription': return <Tv className="w-4 h-4 text-rose-400" />;
       case 'Mobile': return <Phone className="w-4 h-4 text-emerald-400" />;
-      default: return <Receipt className="w-4 h-4 text-gray-400" />;
+      default: return <Receipt className="w-4 h-4 text-nudge-secondary-text" />;
     }
   };
 
@@ -373,11 +373,8 @@ export default function BillOptimizer({ profile }: Props) {
       {/* Compact Header */}
       <header className="flex items-center justify-between flex-shrink-0">
         <div>
-          <h1 className="text-xl font-bold tracking-tight mb-0.5 flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-accent-500" />
-            Smart Bill Optimizer
-          </h1>
-          <p className="text-gray-500 text-xs text-left">AI-powered bill analysis and cost reduction.</p>
+          <h1 className="text-2xl font-bold tracking-tight mb-0.5">Smart Bill Optimizer</h1>
+          <p className="text-nudge-secondary-text text-xs">AI-powered bill analysis and cost reduction.</p>
         </div>
         <button 
           onClick={simulateFetch}
@@ -390,50 +387,50 @@ export default function BillOptimizer({ profile }: Props) {
       </header>
 
       {/* Top Meta Row */}
-      <div className="grid grid-cols-4 gap-3 flex-shrink-0">
-        <div className="bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-md">
-          <p className="text-[9px] text-white/50 uppercase tracking-widest font-bold mb-1">Total Monthly</p>
-          <h3 className="text-lg font-bold">{formatCurrency(totalBills)}</h3>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 flex-shrink-0">
+        <div className="card-glass p-4 relative overflow-hidden">
+          <h3 className="text-sm font-bold mb-1 flex items-center gap-1.5"><Receipt className="w-4 h-4 text-accent-400" /> Total Monthly</h3>
+          <div className="text-2xl font-bold">{formatCurrency(totalBills)}</div>
         </div>
-        <div className="bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-md">
-          <p className="text-[9px] text-white/50 uppercase tracking-widest font-bold mb-1">Highest Bill</p>
-          <h3 className="text-lg font-bold">{formatCurrency(highestBill)}</h3>
+        <div className="card-glass p-4 relative overflow-hidden">
+          <h3 className="text-sm font-bold mb-1 flex items-center gap-1.5"><TrendingUp className="w-4 h-4 text-rose-400" /> Highest Bill</h3>
+          <div className="text-2xl font-bold">{formatCurrency(highestBill)}</div>
         </div>
-        <div className="bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-md">
-          <p className="text-[9px] text-white/50 uppercase tracking-widest font-bold mb-1">Savings Potential</p>
-          <h3 className="text-lg font-bold text-emerald-400">{formatCurrency(potentialSavings)}</h3>
+        <div className="card-glass p-4 relative overflow-hidden">
+          <h3 className="text-sm font-bold mb-1 flex items-center gap-1.5"><Zap className="w-4 h-4 text-emerald-400" /> Savings Potential</h3>
+          <div className="text-2xl font-bold text-emerald-400">{formatCurrency(potentialSavings)}</div>
         </div>
-        <div className="bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-md">
-          <p className="text-[9px] text-white/50 uppercase tracking-widest font-bold mb-1">Overpayment</p>
-          <h3 className={cn("text-lg font-bold", overpaymentAlerts > 0 ? "text-rose-500" : "text-white")}>
+        <div className="card-glass p-4 relative overflow-hidden">
+          <h3 className="text-sm font-bold mb-1 flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 text-rose-400" /> Overpayment</h3>
+          <div className={cn("text-2xl font-bold", overpaymentAlerts > 0 ? "text-rose-500" : "text-nudge-primary-text")}>
             {overpaymentAlerts} Alerts
-          </h3>
+          </div>
         </div>
       </div>
 
       {/* Action Row */}
       <div className="flex gap-3 flex-shrink-0">
-        <button onClick={startCamera} className="flex-1 py-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-1.5 text-xs font-bold">
-          <Camera className="w-3.5 h-3.5 text-accent-400" /> Scan Bill
+        <button onClick={startCamera} className="flex-1 py-2.5 bg-nudge-inverse/10 border border-nudge-border rounded-xl hover:bg-nudge-inverse/10 transition-all flex items-center justify-center gap-1.5 text-sm font-bold">
+          <Camera className="w-4 h-4 text-accent-400" /> Scan Bill
         </button>
         <input type="file" ref={fileInputRef} className="hidden" accept=".pdf,.jpg,.jpeg,.png" onChange={handleFileUpload} />
-        <button onClick={triggerFileUpload} disabled={isAnalyzing} className="flex-1 py-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-1.5 text-xs font-bold disabled:opacity-50">
-          {isAnalyzing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 text-accent-400" />} Upload File
+        <button onClick={triggerFileUpload} disabled={isAnalyzing} className="flex-1 py-2.5 bg-nudge-inverse/10 border border-nudge-border rounded-xl hover:bg-nudge-inverse/10 transition-all flex items-center justify-center gap-1.5 text-sm font-bold disabled:opacity-50">
+          {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4 text-accent-400" />} Upload File
         </button>
-        <button onClick={checkIssues} disabled={isCheckingIssues} className="flex-1 py-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-1.5 text-xs font-bold disabled:opacity-50">
-          {isCheckingIssues ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5 text-rose-400" />} Find Issues
+        <button onClick={checkIssues} disabled={isCheckingIssues} className="flex-1 py-2.5 bg-nudge-inverse/10 border border-nudge-border rounded-xl hover:bg-nudge-inverse/10 transition-all flex items-center justify-center gap-1.5 text-sm font-bold disabled:opacity-50">
+          {isCheckingIssues ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4 text-rose-400" />} Find Issues
         </button>
       </div>
 
       {/* Main Content Area */}
       <div className="flex-1 min-h-0 flex gap-3">
         {/* Left: Table */}
-        <div className="flex-[5.5] bg-white/[0.02] border border-white/[0.05] rounded-xl flex flex-col overflow-hidden backdrop-blur-md relative">
+        <div className="card-glass flex-[5.5] flex flex-col overflow-hidden relative">
            {isAnalyzing && (
               <div className="absolute inset-0 bg-[#0A0A0A]/80 z-10 flex flex-col items-center justify-center backdrop-blur-sm">
                 <Loader2 className="w-6 h-6 text-accent-500 animate-spin mb-2" />
-                <p className="text-xs font-bold text-accent-400">{analysisSteps[analysisStep]}</p>
-                <div className="w-32 bg-white/5 h-1 rounded-full overflow-hidden mt-2">
+                <p className="text-sm font-bold text-accent-400">{analysisSteps[analysisStep]}</p>
+                <div className="w-32 bg-nudge-inverse/10 h-1 rounded-full overflow-hidden mt-2">
                   <motion.div initial={{ width: 0 }} animate={{ width: `${((analysisStep + 1) / analysisSteps.length) * 100}%` }} className="h-full bg-accent-500" />
                 </div>
               </div>
@@ -441,7 +438,7 @@ export default function BillOptimizer({ profile }: Props) {
            <div className="flex-1 overflow-y-auto w-full">
              <table className="w-full text-left">
                 <thead className="sticky top-0 bg-[#0A0A0A] z-10">
-                  <tr className="text-white/50 text-[9px] uppercase tracking-widest border-b border-white/5">
+                  <tr className="text-nudge-secondary-text text-[10px] uppercase tracking-widest border-b border-nudge-border">
                     <th className="px-4 py-3 font-medium">Provider</th>
                     <th className="px-4 py-3 font-medium">Amount</th>
                     <th className="px-4 py-3 font-medium">Change</th>
@@ -453,18 +450,18 @@ export default function BillOptimizer({ profile }: Props) {
                     <tr key={bill.id} className="hover:bg-white/[0.02] transition-colors">
                       <td className="px-4 py-2.5">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center">
+                          <div className="w-7 h-7 bg-nudge-inverse/10 rounded-lg flex items-center justify-center">
                             {getIcon(bill.type)}
                           </div>
                           <div>
-                            <div className="text-xs font-bold">{bill.provider}</div>
-                            <div className="text-[10px] text-gray-500">{bill.type}</div>
+                            <div className="text-sm font-bold">{bill.provider}</div>
+                            <div className="text-[10px] text-nudge-secondary-text">{bill.type}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-2.5 text-xs font-bold">{formatCurrency(bill.amount)}</td>
+                      <td className="px-4 py-2.5 text-sm font-bold">{formatCurrency(bill.amount)}</td>
                       <td className="px-4 py-2.5">
-                        <div className={cn("flex items-center gap-1 text-[10px] font-bold", bill.change > 0 ? "text-rose-500" : bill.change < 0 ? "text-emerald-500" : "text-gray-500")}>
+                        <div className={cn("flex items-center gap-1 text-[10px] font-bold", bill.change > 0 ? "text-rose-500" : bill.change < 0 ? "text-emerald-500" : "text-nudge-secondary-text")}>
                           {bill.change > 0 ? '+' : ''}{bill.change}%
                         </div>
                       </td>
@@ -476,7 +473,7 @@ export default function BillOptimizer({ profile }: Props) {
                     </tr>
                   ))}
                   {bills.length === 0 && (
-                    <tr><td colSpan={4} className="px-4 py-8 text-center text-xs text-gray-500 border-b-0">No bills analyzed yet. Fetch or upload a bill.</td></tr>
+                    <tr><td colSpan={4} className="px-4 py-8 text-center text-xs text-nudge-secondary-text border-b-0">No bills analyzed yet. Fetch or upload a bill.</td></tr>
                   )}
                 </tbody>
              </table>
@@ -490,13 +487,13 @@ export default function BillOptimizer({ profile }: Props) {
           {issues.length > 0 && (
             <div className="bg-rose-500/5 border border-rose-500/10 rounded-xl p-3 flex-shrink-0">
               <h3 className="text-[10px] font-bold text-rose-500 mb-2 flex items-center gap-1.5 uppercase tracking-widest">
-                <AlertTriangle className="w-3.5 h-3.5" /> Action Required ({issues.length})
+                <AlertTriangle className="w-4 h-4" /> Action Required ({issues.length})
               </h3>
               <div className="space-y-2">
                 {issues.map(issue => (
                   <div key={issue.id} className="text-[10px]">
                     <p className="font-bold text-rose-300">{issue.title}</p>
-                    <p className="text-gray-400 mt-0.5">{issue.description}</p>
+                    <p className="text-nudge-secondary-text mt-0.5">{issue.description}</p>
                   </div>
                 ))}
               </div>
@@ -504,32 +501,32 @@ export default function BillOptimizer({ profile }: Props) {
           )}
 
           {/* Chat Container */}
-          <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl flex flex-col overflow-hidden min-h-0">
-             <div className="p-3 border-b border-white/5 bg-accent-600/5 flex items-center gap-2 flex-shrink-0">
+          <div className="card-glass flex-1 flex flex-col overflow-hidden min-h-0">
+             <div className="p-3 border-b border-nudge-border bg-accent-600/5 flex items-center gap-2 flex-shrink-0">
                 <div className="w-6 h-6 bg-action rounded text-white flex items-center justify-center">
                   <MessageSquare className="w-3 h-3" />
                 </div>
-                <h3 className="text-xs font-bold">Bill Expert AI</h3>
+                <h3 className="text-sm font-bold">Bill Expert AI</h3>
              </div>
              
              <div className="flex-1 overflow-y-auto p-3 space-y-3">
                 {chatHistory.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[90%] p-2.5 text-[11px] leading-relaxed ${msg.role === 'user' ? 'bg-action text-white rounded-xl rounded-br-sm' : 'bg-white/5 border border-white/10 text-gray-300 rounded-xl rounded-bl-sm'}`}>
+                    <div className={`max-w-[90%] p-2.5 text-xs leading-relaxed ${msg.role === 'user' ? 'bg-action text-nudge-primary-text rounded-xl rounded-br-sm' : 'bg-nudge-inverse/10 border border-nudge-border text-nudge-secondary-text rounded-xl rounded-bl-sm'}`}>
                       <div className="whitespace-pre-wrap">{msg.text}</div>
                     </div>
                   </div>
                 ))}
              </div>
             
-             <form onSubmit={handleChat} className="p-2 border-t border-white/5 flex-shrink-0">
+             <form onSubmit={handleChat} className="p-2 border-t border-nudge-border flex-shrink-0">
                 <div className="relative">
                   <input 
                     type="text" 
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
                     placeholder="Ask about your bills..."
-                    className="w-full bg-white/5 border border-white/10 rounded flex-1 py-1.5 pl-2.5 pr-8 focus:outline-none focus:border-accent-500 text-[11px]"
+                    className="w-full bg-nudge-inverse/10 border border-nudge-border rounded flex-1 py-1.5 pl-2.5 pr-8 focus:outline-none focus:border-accent-500 text-xs"
                   />
                   <button type="submit" className="absolute right-1 top-1 bottom-1 px-1.5 text-accent-400 hover:bg-accent-500/20 rounded flex items-center justify-center transition-all">
                     <ArrowRight className="w-3 h-3" />
@@ -543,24 +540,24 @@ export default function BillOptimizer({ profile }: Props) {
       {/* Camera Modal */}
       <AnimatePresence>
         {isCameraOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[300] bg-black/90 flex flex-col items-center justify-center p-4">
-             <div className="relative w-full max-w-sm aspect-[3/4] bg-zinc-900 rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[300] bg-nudge-inverse/90 flex flex-col items-center justify-center p-4">
+             <div className="relative w-full max-w-sm aspect-[3/4] bg-zinc-900 rounded-2xl overflow-hidden border border-nudge-border shadow-2xl">
                 {cameraError ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                     <AlertTriangle className="w-10 h-10 text-rose-500 mb-4" />
                     <h4 className="text-sm font-bold mb-2">Camera Error</h4>
-                    <p className="text-gray-400 text-xs mb-6">{cameraError}</p>
-                    <button onClick={stopCamera} className="px-6 py-2 bg-white/10 rounded-lg text-xs font-bold">Close</button>
+                    <p className="text-nudge-secondary-text text-xs mb-6">{cameraError}</p>
+                    <button onClick={stopCamera} className="px-6 py-2 bg-nudge-inverse/10 rounded-lg text-sm font-bold">Close</button>
                   </div>
                 ) : (
                   <>
                     <video ref={videoRef} autoPlay playsInline className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute inset-0 border-[20px] border-black/40 pointer-events-none" />
                     <div className="absolute bottom-6 left-0 right-0 flex justify-center items-center gap-6">
-                      <button onClick={stopCamera} className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center">
+                      <button onClick={stopCamera} className="w-10 h-10 bg-nudge-inverse/10 backdrop-blur-md rounded-full flex items-center justify-center">
                         <X className="w-5 h-5" />
                       </button>
-                      <button onClick={captureImage} className="w-16 h-16 bg-white rounded-full flex items-center justify-center border-4 border-white/20 active:scale-90 transition-transform">
+                      <button onClick={captureImage} className="w-16 h-16 bg-white rounded-full flex items-center justify-center border-4 border-nudge-border active:scale-90 transition-transform">
                         <div className="w-12 h-12 border-2 border-black rounded-full" />
                       </button>
                       <div className="w-10 h-10" />
@@ -576,36 +573,36 @@ export default function BillOptimizer({ profile }: Props) {
       {/* Retake/Analyze Screen Overlay (condensed) */}
       <AnimatePresence>
         {capturedImage && !isCameraOpen && !scanResult && !isAnalyzingScan && (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 bg-[#0a0a0a]/95 backdrop-blur-lg rounded-2xl border border-white/10 p-5 flex flex-col items-center justify-center shadow-2xl">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 bg-[#0a0a0a]/95 backdrop-blur-lg rounded-2xl border border-nudge-border p-5 flex flex-col items-center justify-center shadow-2xl">
             <h3 className="text-sm font-bold mb-3">Captured Bill</h3>
-            <img src={capturedImage} className="w-full h-40 object-contain rounded border border-white/5 mb-4" alt="Scanned Bill" />
+            <img src={capturedImage} className="w-full h-40 object-contain rounded border border-nudge-border mb-4" alt="Scanned Bill" />
             <div className="flex gap-2 w-full">
-              <button onClick={startCamera} className="flex-1 py-2 bg-white/10 hover:bg-white/15 rounded text-xs font-bold transition-colors">Retake</button>
-              <button onClick={analyzeScan} className="flex-1 py-2 bg-action text-white rounded text-xs font-bold">Analyze</button>
+              <button onClick={startCamera} className="flex-1 py-2 bg-nudge-inverse/10 hover:bg-nudge-inverse/15 rounded text-sm font-bold transition-colors">Retake</button>
+              <button onClick={analyzeScan} className="flex-1 py-2 bg-action text-white rounded text-sm font-bold">Analyze</button>
             </div>
           </motion.div>
         )}
         {scanResult && !isAnalyzingScan && (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 bg-[#0a0a0a]/95 backdrop-blur-lg rounded-2xl border border-white/10 p-5 shadow-2xl">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 bg-[#0a0a0a]/95 backdrop-blur-lg rounded-2xl border border-nudge-border p-5 shadow-2xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-sm font-bold flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> Scanned Successfully</h3>
-              <button onClick={() => {setScanResult(null); setCapturedImage(null);}} className="text-white/40 hover:text-white"><X className="w-4 h-4" /></button>
+              <button onClick={() => {setScanResult(null); setCapturedImage(null);}} className="text-nudge-secondary-text hover:text-nudge-primary-text"><X className="w-4 h-4" /></button>
             </div>
-            <div className="bg-white/5 rounded-lg p-3 mb-3 border border-white/5">
-              <p className="text-[10px] text-white/50 uppercase">Provider</p>
+            <div className="bg-nudge-inverse/10 rounded-lg p-3 mb-3 border border-nudge-border">
+              <p className="text-[10px] text-nudge-secondary-text uppercase">Provider</p>
               <p className="text-sm font-bold">{scanResult.provider}</p>
             </div>
-            <div className="bg-white/5 rounded-lg p-3 mb-4 border border-white/5 flex justify-between items-center">
+            <div className="bg-nudge-inverse/10 rounded-lg p-3 mb-4 border border-nudge-border flex justify-between items-center">
               <div>
-                <p className="text-[10px] text-white/50 uppercase">Amount Due</p>
-                <p className="text-lg font-bold text-rose-400">{formatCurrency(scanResult.amount)}</p>
+                <p className="text-[10px] text-nudge-secondary-text uppercase">Amount Due</p>
+                <p className="text-xl font-bold text-rose-400">{formatCurrency(scanResult.amount)}</p>
               </div>
               <div className="text-right">
-                <p className="text-[10px] text-white/50 uppercase">Date</p>
+                <p className="text-[10px] text-nudge-secondary-text uppercase">Date</p>
                 <p className="text-xs font-medium">{scanResult.date}</p>
               </div>
             </div>
-            <button onClick={() => {setScanResult(null); setCapturedImage(null);}} className="w-full py-2 bg-action text-white rounded text-xs font-bold">Save and Close</button>
+            <button onClick={() => {setScanResult(null); setCapturedImage(null);}} className="w-full py-2 bg-action text-white rounded text-sm font-bold">Save and Close</button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -613,8 +610,8 @@ export default function BillOptimizer({ profile }: Props) {
       <div className="fixed bottom-6 right-6 z-[200] space-y-2 pointer-events-none">
         <AnimatePresence>
           {toasts.map((toast) => (
-            <motion.div key={toast.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className={cn("pointer-events-auto px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 min-w-[200px] backdrop-blur-xl border text-[11px]", toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" : toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" : "bg-accent-500/20 border-accent-500/20 text-accent-400")}>
-              {toast.type === 'success' ? <Check className="w-3.5 h-3.5" /> : toast.type === 'error' ? <X className="w-3.5 h-3.5" /> : <Info className="w-3.5 h-3.5" />}
+            <motion.div key={toast.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className={cn("pointer-events-auto px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 min-w-[200px] backdrop-blur-xl border text-xs", toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" : toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" : "bg-accent-500/20 border-accent-500/20 text-accent-400")}>
+              {toast.type === 'success' ? <Check className="w-4 h-4" /> : toast.type === 'error' ? <X className="w-4 h-4" /> : <Info className="w-4 h-4" />}
               <span className="font-bold">{toast.message}</span>
             </motion.div>
           ))}

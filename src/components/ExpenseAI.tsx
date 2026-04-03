@@ -84,12 +84,12 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
       <header className="flex items-center justify-between flex-shrink-0">
         <div>
           <h1 className="text-2xl font-bold tracking-tight mb-0.5">Expense AI</h1>
-          <p className="text-gray-500 text-xs">Uncovering hidden patterns in your spending.</p>
+          <p className="text-nudge-secondary-text text-xs">Uncovering hidden patterns in your spending.</p>
         </div>
         <button 
           onClick={handleUploadCSV}
           disabled={isUploading}
-          className="px-3 py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center gap-2 disabled:opacity-50 text-xs"
+          className="px-3 py-2 bg-nudge-inverse/10 border border-nudge-border rounded-xl hover:bg-nudge-inverse/10 transition-all flex items-center gap-2 disabled:opacity-50 text-xs"
         >
           {isUploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
           Upload CSV
@@ -97,7 +97,7 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
       </header>
 
       {/* Compact Add Form */}
-      <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 backdrop-blur-md flex-shrink-0">
+      <div className="bg-nudge-inverse/10 border border-nudge-border rounded-xl p-3.5 backdrop-blur-md flex-shrink-0">
         <form onSubmit={handleAddTransaction} className="flex gap-3 items-center">
           <Plus className="w-4 h-4 text-accent-400 flex-shrink-0" />
           <input 
@@ -105,7 +105,7 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
             placeholder="Merchant Name" 
             value={newTx.name}
             onChange={e => setNewTx({...newTx, name: e.target.value})}
-            className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-500 text-sm"
+            className="flex-1 bg-nudge-inverse/10 border border-nudge-border rounded-lg px-3 py-2 focus:outline-none focus:border-accent-500 text-sm"
             required
           />
           <input 
@@ -113,7 +113,7 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
             placeholder="Amount" 
             value={newTx.amount}
             onChange={e => setNewTx({...newTx, amount: e.target.value})}
-            className="w-28 bg-white/5 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-500 text-sm"
+            className="w-28 bg-nudge-inverse/10 border border-nudge-border rounded-lg px-3 py-2 focus:outline-none focus:border-accent-500 text-sm"
             required
             min="0.01"
             step="0.01"
@@ -121,7 +121,7 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
           <select 
             value={newTx.category}
             onChange={e => setNewTx({...newTx, category: e.target.value})}
-            className="w-32 bg-white/5 border border-white/10 rounded-lg px-3 py-2 focus:outline-none focus:border-accent-500 appearance-none text-white text-sm"
+            className="w-32 bg-nudge-inverse/10 border border-nudge-border rounded-lg px-3 py-2 focus:outline-none focus:border-accent-500 appearance-none text-nudge-primary-text text-sm"
           >
             <option value="Food" className="bg-[#111]">Food</option>
             <option value="Transport" className="bg-[#111]">Transport</option>
@@ -151,11 +151,11 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
             <Zap className="w-3.5 h-3.5 text-accent-400" />
             Spending Loopholes
           </h3>
-          <p className="text-gray-400 text-[10px] mb-2">Recurring small expenses adding up monthly.</p>
+          <p className="text-nudge-secondary-text text-[10px] mb-2">Recurring small expenses adding up monthly.</p>
           <div className="text-xl font-bold text-accent-400">
             {formatCurrency(Math.abs(loopholes.reduce((acc, tx) => acc + tx.amount, 0)))}
           </div>
-          <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">Potential Savings</p>
+          <p className="text-[9px] text-nudge-secondary-text uppercase tracking-widest font-bold mt-0.5">Potential Savings</p>
         </div>
 
         <div className="card-glass p-4 relative overflow-hidden">
@@ -166,11 +166,11 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
             <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
             Lost Money Found
           </h3>
-          <p className="text-gray-400 text-[10px] mb-2">Flagged transactions needing attention.</p>
+          <p className="text-nudge-secondary-text text-[10px] mb-2">Flagged transactions needing attention.</p>
           <div className="text-xl font-bold text-rose-400">
             {formatCurrency(Math.abs(lostMoney.reduce((acc, tx) => acc + tx.amount, 0)))}
           </div>
-          <p className="text-[9px] text-gray-500 uppercase tracking-widest font-bold mt-0.5">Total Flagged</p>
+          <p className="text-[9px] text-nudge-secondary-text uppercase tracking-widest font-bold mt-0.5">Total Flagged</p>
         </div>
 
         <div className="bg-gradient-to-r from-emerald-600/15 to-accent-600/15 border border-emerald-500/15 rounded-2xl p-4 flex items-center gap-3">
@@ -179,7 +179,7 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-bold mb-0.5">Put idle money to work</h3>
-            <p className="text-[10px] text-gray-400 truncate">{formatCurrency(1850)} idle → {formatCurrency(240)}/yr via SIP</p>
+            <p className="text-[10px] text-nudge-secondary-text truncate">{formatCurrency(1850)} idle → {formatCurrency(240)}/yr via SIP</p>
           </div>
           <button 
             onClick={() => onNavigate('invest')}
@@ -192,15 +192,15 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
 
       {/* Smart Cash Flow Table — fills remaining space with internal scroll */}
       <div className="card-glass flex flex-col flex-1 min-h-0 overflow-hidden">
-        <div className="p-4 border-b border-white/5 flex items-center justify-between flex-shrink-0">
+        <div className="p-4 border-b border-nudge-border flex items-center justify-between flex-shrink-0">
           <h3 className="text-sm font-bold">Smart Cash Flow</h3>
-          <div className="flex bg-white/5 p-0.5 rounded-lg border border-white/10">
+          <div className="flex bg-nudge-inverse/10 p-0.5 rounded-lg border border-nudge-border">
             {(['all', 'loopholes', 'lost'] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                  filter === f ? 'bg-action text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'
+                  filter === f ? 'bg-action text-nudge-primary-text shadow-lg' : 'text-nudge-secondary-text hover:text-nudge-secondary-text'
                 }`}
               >
                 {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -211,7 +211,7 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
         <div className="overflow-y-auto flex-1 min-h-0">
           <table className="w-full text-left">
             <thead className="sticky top-0 bg-nudge-primary z-10">
-              <tr className="text-gray-500 text-[10px] uppercase tracking-widest border-b border-white/5">
+              <tr className="text-nudge-secondary-text text-[10px] uppercase tracking-widest border-b border-nudge-border">
                 <th className="px-4 py-2.5 font-bold">Transaction</th>
                 <th className="px-4 py-2.5 font-bold">Category</th>
                 <th className="px-4 py-2.5 font-bold">Amount</th>
@@ -220,17 +220,17 @@ const ExpenseAI = React.memo(function ExpenseAI({ profile, transactions, onNavig
             </thead>
             <tbody className="divide-y divide-white/5">
               {filteredTransactions.map((tx) => (
-                <tr key={tx.id} className="hover:bg-white/5 transition-all group">
+                <tr key={tx.id} className="hover:bg-nudge-inverse/10 transition-all group">
                   <td className="px-4 py-2.5">
                     <div className="font-bold text-xs">{tx.name}</div>
-                    <div className="text-[10px] text-gray-500">{new Date(tx.timestamp).toLocaleDateString()}</div>
+                    <div className="text-[10px] text-nudge-secondary-text">{new Date(tx.timestamp).toLocaleDateString()}</div>
                   </td>
                   <td className="px-4 py-2.5">
-                    <span className="px-2 py-0.5 bg-white/5 rounded-full text-[10px] font-medium text-gray-400">
+                    <span className="px-2 py-0.5 bg-nudge-inverse/10 rounded-full text-[10px] font-medium text-nudge-secondary-text">
                       {tx.category}
                     </span>
                   </td>
-                  <td className={`px-4 py-2.5 font-bold text-xs ${tx.amount > 0 ? 'text-emerald-400' : 'text-white'}`}>
+                  <td className={`px-4 py-2.5 font-bold text-xs ${tx.amount > 0 ? 'text-emerald-400' : 'text-nudge-primary-text'}`}>
                     {tx.amount > 0 ? '+' : ''}{formatCurrency(tx.amount)}
                   </td>
                   <td className="px-4 py-2.5">

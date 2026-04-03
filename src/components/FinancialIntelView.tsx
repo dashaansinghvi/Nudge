@@ -66,8 +66,8 @@ export default function FinancialIntelView({ profile, transactions, onNavigate, 
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-all text-xs font-medium ${
                 isActive 
-                  ? 'bg-action text-white shadow-md' 
-                  : 'text-white/50 hover:bg-white/[0.04] hover:text-white/80'
+                  ? 'bg-action text-nudge-primary-text shadow-md' 
+                  : 'text-nudge-secondary-text hover:bg-white/[0.04] hover:text-nudge-primary-text'
               }`}
             >
               <tab.icon className="w-3.5 h-3.5" />

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "./button";
 import React from "react";
 
-function FloatingPaths({ position }: { position: number }) {
+export function FloatingPaths({ position, className }: { position: number, className?: string }) {
     const paths = Array.from({ length: 36 }, (_, i) => ({
         id: i,
         d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${
@@ -19,11 +19,12 @@ function FloatingPaths({ position }: { position: number }) {
     }));
 
     return (
-        <div className="absolute inset-0 pointer-events-none">
+        <div className={`absolute inset-0 pointer-events-none ${className || ''}`}>
             <svg
-                className="w-full h-full text-slate-950 dark:text-white"
+                className="w-full h-full text-slate-950 dark:text-nudge-primary-text"
                 viewBox="0 0 696 316"
                 fill="none"
+                preserveAspectRatio="xMidYMid slice"
             >
                 <title>Background Paths</title>
                 {paths.map((path) => (
@@ -53,19 +54,23 @@ function FloatingPaths({ position }: { position: number }) {
 
 export function BackgroundPaths({
     title = "Background Paths",
-    children
+    children,
+    noPaths = false,
 }: {
     title?: string;
     children?: React.ReactNode;
+    noPaths?: boolean;
 }) {
     const words = title.split(" ");
 
     return (
-        <div className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden bg-white dark:bg-neutral-950" style={{ backgroundColor: 'var(--bg-primary)' }}>
-            <div className="absolute inset-0">
-                <FloatingPaths position={1} />
-                <FloatingPaths position={-1} />
-            </div>
+        <div className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden bg-transparent">
+            {!noPaths && (
+                <div className="absolute inset-0">
+                    <FloatingPaths position={1} />
+                    <FloatingPaths position={-1} />
+                </div>
+            )}
 
             <div className="relative z-10 container mx-auto px-4 md:px-6 text-center pt-24">
                 <motion.div
@@ -117,9 +122,9 @@ export function BackgroundPaths({
                             <Button
                                 variant="ghost"
                                 className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
-                                bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100 
-                                text-black dark:text-white transition-all duration-300 
-                                group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
+                                bg-nudge-inverse/95 hover:bg-nudge-inverse/100 dark:bg-nudge-inverse/95 dark:hover:bg-nudge-inverse/100 
+                                text-black dark:text-nudge-primary-text transition-all duration-300 
+                                group-hover:-translate-y-0.5 border border-black/10 dark:border-nudge-border
                                 hover:shadow-md dark:hover:shadow-neutral-800/50"
                             >
                                 <span className="opacity-90 group-hover:opacity-100 transition-opacity">

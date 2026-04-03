@@ -10,15 +10,28 @@
   --color-secondary-400: var(--secondary-400);
   --color-secondary-500: var(--secondary-500);
   --color-secondary-600: var(--secondary-600);
+  --color-nudge-primary: var(--bg-primary);
+  --color-nudge-secondary: var(--bg-secondary);
+  --color-nudge-inverse: var(--bg-inverse);
+  
+  --color-nudge-primary-text: var(--text-primary);
+  --color-nudge-secondary-text: var(--text-secondary);
+  --color-nudge-inverse-text: var(--text-inverse);
+  
+  --color-nudge-border: var(--border-color);
 }
+
+@custom-variant dark (&:where(.dark-theme, .dark-theme *));
 
 :root {
   --bg-primary: #09090b; 
   --bg-secondary: #0f1115;
+  --bg-inverse: #ffffff;
   --bg-card: rgba(255, 255, 255, 0.03);
   --border-color: rgba(255, 255, 255, 0.06);
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
+  --text-inverse: #000000;
   
   /* Glassmorphism System */
   --glass-bg: rgba(255, 255, 255, 0.02);
@@ -99,10 +112,12 @@
 .light-theme {
   --bg-primary: #ffffff;
   --bg-secondary: #fdfdfd;
+  --bg-inverse: #000000;
   --bg-card: rgba(255, 255, 255, 0.9);
   --border-color: rgba(0, 0, 0, 0.05);
   --text-primary: #171717; /* neutral-900 */
   --text-secondary: #525252;
+  --text-inverse: #ffffff;
   --tagline-color: var(--accent-600);
   
   --glass-bg: rgba(255, 255, 255, 0.9);

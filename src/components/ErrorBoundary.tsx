@@ -39,8 +39,8 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="flex flex-col items-center justify-center min-h-[400px] p-8 text-center bg-rose-500/10 border border-rose-500/20 rounded-3xl backdrop-blur-md">
           <AlertCircle className="w-12 h-12 text-rose-500 mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">Oops! Financial Data Error</h2>
-          <p className="text-gray-400 max-w-md mb-6">{errorMessage}</p>
+          <h2 className="text-2xl font-bold text-nudge-primary-text mb-2">Oops! Financial Data Error</h2>
+          <p className="text-nudge-secondary-text max-w-md mb-6">{errorMessage}</p>
           <button
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-rose-500 text-white rounded-full font-medium hover:bg-rose-600 transition-colors"

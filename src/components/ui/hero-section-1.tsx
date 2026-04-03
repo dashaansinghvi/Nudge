@@ -49,28 +49,28 @@ export function HeroSection({ onTakeTest, onSignup, onLogin }: HeroSectionProps)
                                 <AnimatedGroup variants={transitionVariants}>
                                     <button
                                         onClick={onTakeTest}
-                                        className="hover:bg-white/10 bg-white/5 group mx-auto flex w-fit items-center gap-4 rounded-full border border-white/10 p-1 pl-4 shadow-md shadow-black/5 transition-all duration-300 cursor-pointer">
-                                        <span className="text-white/80 text-sm">AI-Powered Financial Intelligence</span>
-                                        <span className="block h-4 w-0.5 border-l border-white/20 bg-white/10"></span>
+                                        className="hover:bg-nudge-inverse/10 bg-nudge-inverse/10 group mx-auto flex w-fit items-center gap-4 rounded-full border border-nudge-border p-1 pl-4 shadow-md shadow-black/5 transition-all duration-300 cursor-pointer">
+                                        <span className="text-nudge-primary-text text-sm">AI-Powered Financial Intelligence</span>
+                                        <span className="block h-4 w-0.5 border-l border-nudge-border bg-nudge-inverse/10"></span>
 
-                                        <div className="bg-white/10 group-hover:bg-white/20 size-6 overflow-hidden rounded-full duration-500">
+                                        <div className="bg-nudge-inverse/10 group-hover:bg-nudge-inverse/20 size-6 overflow-hidden rounded-full duration-500">
                                             <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
                                                 <span className="flex size-6">
-                                                    <ArrowRight className="m-auto size-3 text-white" />
+                                                    <ArrowRight className="m-auto size-3 text-nudge-primary-text" />
                                                 </span>
                                                 <span className="flex size-6">
-                                                    <ArrowRight className="m-auto size-3 text-white" />
+                                                    <ArrowRight className="m-auto size-3 text-nudge-primary-text" />
                                                 </span>
                                             </div>
                                         </div>
                                     </button>
                         
                                     <h1
-                                        className="mt-8 max-w-4xl mx-auto text-balance text-6xl md:text-7xl lg:mt-16 xl:text-[5.25rem] font-bold tracking-tighter text-white">
+                                        className="mt-8 max-w-4xl mx-auto text-balance text-6xl md:text-7xl lg:mt-16 xl:text-[5.25rem] font-bold tracking-tighter text-nudge-primary-text">
                                         Master Your Money With <span style={{background: 'linear-gradient(135deg, #ffffff 0%, #38bdf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>Zero Effort</span>
                                     </h1>
                                     <p
-                                        className="mx-auto mt-6 max-w-2xl text-balance text-lg md:text-xl text-white/80 leading-relaxed">
+                                        className="mx-auto mt-6 max-w-2xl text-balance text-lg md:text-xl text-nudge-primary-text leading-relaxed">
                                         Nudgé analyzes your spending, optimizes your bills, and builds your credit passively — so you can focus on living.
                                     </p>
                                 </AnimatedGroup>
@@ -90,7 +90,7 @@ export function HeroSection({ onTakeTest, onSignup, onLogin }: HeroSectionProps)
                                     className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row">
                                     <div
                                         key={1}
-                                        className="bg-white/10 rounded-[14px] border border-white/10 p-0.5">
+                                        className="bg-nudge-inverse/10 rounded-[14px] border border-nudge-border p-0.5">
                                         <Button
                                             onClick={onTakeTest}
                                             size="lg"
@@ -103,7 +103,7 @@ export function HeroSection({ onTakeTest, onSignup, onLogin }: HeroSectionProps)
                                         onClick={onSignup}
                                         size="lg"
                                         variant="ghost"
-                                        className="h-10.5 rounded-xl px-5 text-white/80 hover:text-white hover:bg-white/10 cursor-pointer">
+                                        className="h-10.5 rounded-xl px-5 text-nudge-primary-text hover:text-nudge-primary-text hover:bg-nudge-inverse/10 cursor-pointer">
                                         <span className="text-nowrap">Sign Up Directly</span>
                                     </Button>
                                 </AnimatedGroup>
@@ -142,7 +142,7 @@ const HeroHeader = ({ onLogin, onSignup }: HeroHeaderProps) => {
             <nav
                 data-state={menuState && 'active'}
                 className="fixed z-20 w-full px-2 group">
-                <div className={cn('mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12', isScrolled && 'bg-[var(--bg-primary)]/70 max-w-4xl rounded-2xl border border-white/10 backdrop-blur-lg lg:px-5')}>
+                <div className={cn('mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12', isScrolled && 'bg-[var(--bg-primary)]/70 max-w-4xl rounded-2xl border border-nudge-border backdrop-blur-lg lg:px-5')}>
                     <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
                         <div className="flex w-full justify-between lg:w-auto">
                             <NudgeLogo iconSize={28} textSize="text-lg" />
@@ -151,8 +151,8 @@ const HeroHeader = ({ onLogin, onSignup }: HeroHeaderProps) => {
                                 onClick={() => setMenuState(!menuState)}
                                 aria-label={menuState == true ? 'Close Menu' : 'Open Menu'}
                                 className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden">
-                                <Menu className="in-data-[state=active]:rotate-180 group-data-[state=active]:scale-0 group-data-[state=active]:opacity-0 m-auto size-6 duration-200 text-white" />
-                                <X className="group-data-[state=active]:rotate-0 group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200 text-white" />
+                                <Menu className="in-data-[state=active]:rotate-180 group-data-[state=active]:scale-0 group-data-[state=active]:opacity-0 m-auto size-6 duration-200 text-nudge-primary-text" />
+                                <X className="group-data-[state=active]:rotate-0 group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200 text-nudge-primary-text" />
                             </button>
                         </div>
 
@@ -162,7 +162,7 @@ const HeroHeader = ({ onLogin, onSignup }: HeroHeaderProps) => {
                                     <li key={index}>
                                         <a
                                             href={item.href}
-                                            className="text-white/70 hover:text-white block duration-150">
+                                            className="text-nudge-primary-text hover:text-nudge-primary-text block duration-150">
                                             <span>{item.name}</span>
                                         </a>
                                     </li>
@@ -170,14 +170,14 @@ const HeroHeader = ({ onLogin, onSignup }: HeroHeaderProps) => {
                             </ul>
                         </div>
 
-                        <div className="bg-[var(--bg-secondary)] group-data-[state=active]:block lg:group-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border border-white/10 p-6 shadow-2xl shadow-black/30 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none">
+                        <div className="bg-[var(--bg-secondary)] group-data-[state=active]:block lg:group-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border border-nudge-border p-6 shadow-2xl shadow-black/30 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none">
                             <div className="lg:hidden">
                                 <ul className="space-y-6 text-base">
                                     {menuItems.map((item, index) => (
                                         <li key={index}>
                                             <a
                                                 href={item.href}
-                                                className="text-white/60 hover:text-white block duration-150">
+                                                className="text-nudge-secondary-text hover:text-nudge-primary-text block duration-150">
                                                 <span>{item.name}</span>
                                             </a>
                                         </li>
@@ -189,19 +189,19 @@ const HeroHeader = ({ onLogin, onSignup }: HeroHeaderProps) => {
                                     onClick={onLogin}
                                     variant="outline"
                                     size="sm"
-                                    className={cn('border-white/10 text-white/80 hover:bg-white/10 hover:text-white cursor-pointer', isScrolled && 'lg:hidden')}>
+                                    className={cn('border-nudge-border text-nudge-primary-text hover:bg-nudge-inverse/10 hover:text-nudge-primary-text cursor-pointer', isScrolled && 'lg:hidden')}>
                                     <span>Login</span>
                                 </Button>
                                 <Button
                                     onClick={onSignup}
                                     size="sm"
-                                    className={cn('bg-action text-white border-0 font-bold cursor-pointer shadow-lg shadow-accent-600/25', isScrolled && 'lg:hidden')}>
+                                    className={cn('bg-action text-nudge-primary-text border-0 font-bold cursor-pointer shadow-lg shadow-accent-600/25', isScrolled && 'lg:hidden')}>
                                     <span>Sign Up</span>
                                 </Button>
                                 <Button
                                     onClick={onLogin}
                                     size="sm"
-                                    className={cn('bg-action text-white border-0 font-bold cursor-pointer', isScrolled ? 'lg:inline-flex' : 'hidden')}>
+                                    className={cn('bg-action text-nudge-primary-text border-0 font-bold cursor-pointer', isScrolled ? 'lg:inline-flex' : 'hidden')}>
                                     <span>Get Started</span>
                                 </Button>
                             </div>

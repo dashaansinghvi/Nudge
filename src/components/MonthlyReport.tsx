@@ -54,32 +54,32 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
       <div className="border-b-2 border-accent-600 pb-6 mb-8 flex justify-between items-end">
         <div>
           <h1 className="text-4xl font-bold text-accent-900 mb-2">Monthly Wealth Report</h1>
-          <p className="text-gray-600 text-lg">Prepared for {profile.name}</p>
+          <p className="text-[#4b5563] text-lg">Prepared for {profile.name}</p>
         </div>
         <div className="text-right">
           <p className="text-xl font-bold text-accent-600">{currentMonth}</p>
-          <p className="text-gray-500">Nudge Financial Intelligence</p>
+          <p className="text-nudge-secondary-text">Nudge Financial Intelligence</p>
         </div>
       </div>
 
       {/* Summary Section */}
       <div className="mb-10">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Financial Summary</h2>
+        <h2 className="text-2xl font-bold text-[#1f2937] mb-4 border-b pb-2">Financial Summary</h2>
         <div className="grid grid-cols-2 gap-6">
-          <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
-            <p className="text-gray-500 text-sm uppercase tracking-wider font-semibold mb-1">Total Income</p>
-            <p className="text-3xl font-bold text-emerald-600">{formatCurrency(totalIncome || profile.balance * 0.2)}</p>
+          <div className="bg-[#f9fafb] p-6 rounded-xl border border-[#f3f4f6]">
+            <p className="text-nudge-secondary-text text-sm uppercase tracking-wider font-semibold mb-1">Total Income</p>
+            <p className="text-3xl font-bold text-[#059669]">{formatCurrency(totalIncome || profile.balance * 0.2)}</p>
           </div>
-          <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
-            <p className="text-gray-500 text-sm uppercase tracking-wider font-semibold mb-1">Monthly Spending</p>
-            <p className="text-3xl font-bold text-rose-600">{formatCurrency(profile.monthly_spending)}</p>
+          <div className="bg-[#f9fafb] p-6 rounded-xl border border-[#f3f4f6]">
+            <p className="text-nudge-secondary-text text-sm uppercase tracking-wider font-semibold mb-1">Monthly Spending</p>
+            <p className="text-3xl font-bold text-[#e11d48]">{formatCurrency(profile.monthly_spending)}</p>
           </div>
-          <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
-            <p className="text-gray-500 text-sm uppercase tracking-wider font-semibold mb-1">Total Savings</p>
+          <div className="bg-[#f9fafb] p-6 rounded-xl border border-[#f3f4f6]">
+            <p className="text-nudge-secondary-text text-sm uppercase tracking-wider font-semibold mb-1">Total Savings</p>
             <p className="text-3xl font-bold text-accent-600">{formatCurrency(profile.savings)}</p>
           </div>
-          <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
-            <p className="text-gray-500 text-sm uppercase tracking-wider font-semibold mb-1">Vitality Score</p>
+          <div className="bg-[#f9fafb] p-6 rounded-xl border border-[#f3f4f6]">
+            <p className="text-nudge-secondary-text text-sm uppercase tracking-wider font-semibold mb-1">Vitality Score</p>
             <p className="text-3xl font-bold text-accent-600">{profile.vitality_score}/100</p>
           </div>
         </div>
@@ -88,7 +88,7 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
       {/* Charts Section */}
       <div className="grid grid-cols-2 gap-8 mb-10">
         <div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Expense Breakdown</h2>
+          <h2 className="text-xl font-bold text-[#1f2937] mb-4">Expense Breakdown</h2>
           <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -113,7 +113,7 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
           </div>
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Spending Trend (Last 7 Days)</h2>
+          <h2 className="text-xl font-bold text-[#1f2937] mb-4">Spending Trend (Last 7 Days)</h2>
           <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={spendingTrend}>
@@ -129,7 +129,7 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
 
       {/* AI Insights */}
       <div className="mb-10">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">AI Financial Insights</h2>
+        <h2 className="text-2xl font-bold text-[#1f2937] mb-4 border-b pb-2">AI Financial Insights</h2>
         <div className="bg-accent-50 rounded-xl p-6 border border-accent-100">
           <ul className="space-y-3">
             {insights.length > 0 ? insights.map((insight, idx) => (
@@ -148,26 +148,26 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
       <div className="grid grid-cols-2 gap-8 mb-10">
         {/* Credit Card Usage */}
         <div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Credit Card Usage</h2>
+          <h2 className="text-xl font-bold text-[#1f2937] mb-4 border-b pb-2">Credit Card Usage</h2>
           <div className="space-y-4">
-            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex justify-between items-center p-3 bg-[#f9fafb] rounded-lg border border-[#f3f4f6]">
               <div>
-                <p className="font-bold text-gray-800">Sapphire Reserve</p>
-                <p className="text-xs text-gray-500">Ending in 4092</p>
+                <p className="font-bold text-[#1f2937]">Sapphire Reserve</p>
+                <p className="text-xs text-nudge-secondary-text">Ending in 4092</p>
               </div>
               <div className="text-right">
-                <p className="font-bold text-rose-600">{formatCurrency(1240.50)}</p>
-                <p className="text-xs text-emerald-600">+3,420 pts</p>
+                <p className="font-bold text-[#e11d48]">{formatCurrency(1240.50)}</p>
+                <p className="text-xs text-[#059669]">+3,420 pts</p>
               </div>
             </div>
-            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex justify-between items-center p-3 bg-[#f9fafb] rounded-lg border border-[#f3f4f6]">
               <div>
-                <p className="font-bold text-gray-800">Amex Gold</p>
-                <p className="text-xs text-gray-500">Ending in 1005</p>
+                <p className="font-bold text-[#1f2937]">Amex Gold</p>
+                <p className="text-xs text-nudge-secondary-text">Ending in 1005</p>
               </div>
               <div className="text-right">
-                <p className="font-bold text-rose-600">{formatCurrency(850.20)}</p>
-                <p className="text-xs text-emerald-600">+1,200 pts</p>
+                <p className="font-bold text-[#e11d48]">{formatCurrency(850.20)}</p>
+                <p className="text-xs text-[#059669]">+1,200 pts</p>
               </div>
             </div>
           </div>
@@ -175,26 +175,26 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
 
         {/* Bill Analysis */}
         <div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Bill Analysis</h2>
+          <h2 className="text-xl font-bold text-[#1f2937] mb-4 border-b pb-2">Bill Analysis</h2>
           <div className="space-y-4">
-            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex justify-between items-center p-3 bg-[#f9fafb] rounded-lg border border-[#f3f4f6]">
               <div>
-                <p className="font-bold text-gray-800">Electricity</p>
-                <p className="text-xs text-amber-600">15% higher than average</p>
+                <p className="font-bold text-[#1f2937]">Electricity</p>
+                <p className="text-xs text-[#d97706]">15% higher than average</p>
               </div>
               <div className="text-right">
-                <p className="font-bold text-gray-800">{formatCurrency(145.00)}</p>
-                <p className="text-xs text-gray-500">Paid on 12th</p>
+                <p className="font-bold text-[#1f2937]">{formatCurrency(145.00)}</p>
+                <p className="text-xs text-nudge-secondary-text">Paid on 12th</p>
               </div>
             </div>
-            <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex justify-between items-center p-3 bg-[#f9fafb] rounded-lg border border-[#f3f4f6]">
               <div>
-                <p className="font-bold text-gray-800">Internet</p>
-                <p className="text-xs text-emerald-600">Optimal plan</p>
+                <p className="font-bold text-[#1f2937]">Internet</p>
+                <p className="text-xs text-[#059669]">Optimal plan</p>
               </div>
               <div className="text-right">
-                <p className="font-bold text-gray-800">{formatCurrency(79.99)}</p>
-                <p className="text-xs text-gray-500">Paid on 15th</p>
+                <p className="font-bold text-[#1f2937]">{formatCurrency(79.99)}</p>
+                <p className="text-xs text-nudge-secondary-text">Paid on 15th</p>
               </div>
             </div>
           </div>
@@ -203,25 +203,25 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
 
       {/* Investment Overview */}
       <div className="mb-10">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Investment Overview</h2>
-        <div className="bg-gray-50 rounded-xl p-6 border border-gray-100 flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-[#1f2937] mb-4 border-b pb-2">Investment Overview</h2>
+        <div className="bg-[#f9fafb] rounded-xl p-6 border border-[#f3f4f6] flex items-center justify-between">
           <div>
-            <p className="text-gray-500 text-sm uppercase tracking-wider font-semibold mb-1">Total Portfolio Value</p>
+            <p className="text-nudge-secondary-text text-sm uppercase tracking-wider font-semibold mb-1">Total Portfolio Value</p>
             <p className="text-3xl font-bold text-accent-600">{formatCurrency(profile.balance * 0.6)}</p>
           </div>
           <div className="text-right">
-            <p className="text-gray-500 text-sm uppercase tracking-wider font-semibold mb-1">Expected Annual Return</p>
-            <p className="text-3xl font-bold text-emerald-600">+8.4%</p>
+            <p className="text-nudge-secondary-text text-sm uppercase tracking-wider font-semibold mb-1">Expected Annual Return</p>
+            <p className="text-3xl font-bold text-[#059669]">+8.4%</p>
           </div>
         </div>
       </div>
 
       {/* Recent Transactions Table */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Recent Transactions</h2>
+        <h2 className="text-2xl font-bold text-[#1f2937] mb-4 border-b pb-2">Recent Transactions</h2>
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-gray-100 text-gray-600 text-sm uppercase tracking-wider">
+            <tr className="bg-[#f3f4f6] text-[#4b5563] text-sm uppercase tracking-wider">
               <th className="p-3 rounded-tl-lg">Date</th>
               <th className="p-3">Description</th>
               <th className="p-3">Category</th>
@@ -230,11 +230,11 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
           </thead>
           <tbody>
             {transactions.slice(0, 8).map((tx, idx) => (
-              <tr key={tx.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                <td className="p-3 text-gray-600 text-sm border-b border-gray-100">{new Date(tx.timestamp).toLocaleDateString()}</td>
-                <td className="p-3 font-medium text-gray-800 border-b border-gray-100">{tx.name}</td>
-                <td className="p-3 text-gray-600 text-sm border-b border-gray-100">{tx.category}</td>
-                <td className={`p-3 text-right font-bold border-b border-gray-100 ${tx.amount > 0 ? 'text-emerald-600' : 'text-gray-800'}`}>
+              <tr key={tx.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-[#f9fafb]'}>
+                <td className="p-3 text-[#4b5563] text-sm border-b border-[#f3f4f6]">{new Date(tx.timestamp).toLocaleDateString()}</td>
+                <td className="p-3 font-medium text-[#1f2937] border-b border-[#f3f4f6]">{tx.name}</td>
+                <td className="p-3 text-[#4b5563] text-sm border-b border-[#f3f4f6]">{tx.category}</td>
+                <td className={`p-3 text-right font-bold border-b border-[#f3f4f6] ${tx.amount > 0 ? 'text-[#059669]' : 'text-[#1f2937]'}`}>
                   {tx.amount > 0 ? '+' : ''}{formatCurrency(tx.amount)}
                 </td>
               </tr>
@@ -244,7 +244,7 @@ export const MonthlyReport = forwardRef<HTMLDivElement, Props>(({ profile, trans
       </div>
 
       {/* Footer */}
-      <div className="mt-12 pt-6 border-t border-gray-200 text-center text-gray-400 text-sm">
+      <div className="mt-12 pt-6 border-t border-[#e5e7eb] text-center text-nudge-secondary-text text-sm">
         <p>This report is generated automatically by Nudge AI. For any discrepancies, please check your live dashboard.</p>
         <p className="mt-1">Generated on {new Date().toLocaleString()}</p>
       </div>

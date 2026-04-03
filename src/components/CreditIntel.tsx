@@ -49,6 +49,7 @@ interface UserCard {
   points: number;
   expiringPoints: number;
   expiryDate: string;
+  cvv: string;
 }
 
 interface MarketCard {
@@ -75,12 +76,13 @@ const INITIAL_USER_CARDS: UserCard[] = [
     name: 'Infinia Metal',
     last4: '4092',
     network: 'Visa',
-    color: 'from-slate-800 to-slate-900 text-white',
+    color: 'from-slate-800 to-slate-900 text-nudge-primary-text',
     limit: 15000,
     available: 12400,
     points: 45000,
     expiringPoints: 2000,
-    expiryDate: '12/26'
+    expiryDate: '12/26',
+    cvv: '123'
   },
   {
     id: 'c2',
@@ -93,7 +95,8 @@ const INITIAL_USER_CARDS: UserCard[] = [
     available: 8500,
     points: 12500,
     expiringPoints: 0,
-    expiryDate: '08/27'
+    expiryDate: '08/27',
+    cvv: '456'
   },
   {
     id: 'c3',
@@ -101,12 +104,13 @@ const INITIAL_USER_CARDS: UserCard[] = [
     name: 'Octane',
     last4: '5514',
     network: 'Mastercard',
-    color: 'from-teal-600 to-teal-800 text-white',
+    color: 'from-teal-600 to-teal-800 text-nudge-primary-text',
     limit: 5000,
     available: 1200,
     points: 8400,
     expiringPoints: 500,
-    expiryDate: '03/25'
+    expiryDate: '03/25',
+    cvv: '789'
   }
 ];
 
@@ -179,7 +183,7 @@ export default function CreditIntel({ profile, transactions }: Props) {
           benefits: ['$300 Travel Credit', '3X Points Dining'],
           eligibility: 'Excellent Credit Required',
           matchScore: 94,
-          color: 'from-blue-800 to-blue-950 text-white'
+          color: 'from-blue-800 to-blue-950 text-nudge-primary-text'
         },
         {
           id: 'm2',
@@ -189,7 +193,7 @@ export default function CreditIntel({ profile, transactions }: Props) {
           benefits: ['10,000 Anniv Miles', '2X Miles All'],
           eligibility: 'Excellent Credit Required',
           matchScore: 88,
-          color: 'from-slate-700 to-slate-900 text-white'
+          color: 'from-slate-700 to-slate-900 text-nudge-primary-text'
         }
       ]);
       setIsFetchingMarket(false);
@@ -213,58 +217,100 @@ export default function CreditIntel({ profile, transactions }: Props) {
       {/* Compact Header */}
       <header className="flex items-center justify-between flex-shrink-0">
         <div>
-          <h1 className="text-xl font-bold tracking-tight mb-0.5 flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-accent-500" />
-            Credit Intelligence
-          </h1>
-          <p className="text-gray-500 text-xs">Manage cards, maximize rewards, and discover premium offers.</p>
+          <h1 className="text-2xl font-bold tracking-tight mb-0.5">Credit Intelligence</h1>
+          <p className="text-nudge-secondary-text text-xs">Manage cards, maximize rewards, and discover premium offers.</p>
         </div>
-        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-2 backdrop-blur-md">
+        <div className="card-glass px-4 py-2 flex items-center gap-3">
           <Award className="w-4 h-4 text-accent-400" />
           <div className="text-right">
-            <p className="text-[9px] text-gray-400 uppercase tracking-widest font-bold">Total Points</p>
-            <h2 className="text-sm font-bold text-white">{totalPoints.toLocaleString()}</h2>
+            <p className="text-[10px] text-nudge-secondary-text uppercase tracking-widest font-bold">Total Points</p>
+            <h2 className="text-sm font-bold text-nudge-primary-text">{totalPoints.toLocaleString()}</h2>
           </div>
         </div>
       </header>
 
       {/* Your Wallet - Compact Cards Row */}
-      <div className="flex-shrink-0 bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 backdrop-blur-md">
+      <div className="card-glass flex-shrink-0 p-4">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xs font-bold flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-accent-400" /> Wallet</h2>
+          <h2 className="text-sm font-bold flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-accent-400" /> Wallet</h2>
           {totalExpiring > 0 && (
             <div className="flex items-center gap-1.5 px-2 py-0.5 bg-rose-500/10 rounded-md">
               <AlertCircle className="w-3 h-3 text-rose-500 animate-pulse" />
-              <span className="text-[9px] font-bold text-rose-500">{totalExpiring.toLocaleString()} expiring</span>
+              <span className="text-[10px] font-bold text-rose-500">{totalExpiring.toLocaleString()} expiring</span>
             </div>
           )}
         </div>
         
-        <div className="flex gap-3 overflow-x-auto pb-2 noscrollbar">
-          {userCards.map(card => (
-            <div 
-              key={card.id}
-              className={cn("w-48 h-28 rounded-lg flex-shrink-0 p-3 shadow-lg bg-gradient-to-br flex flex-col justify-between relative overflow-hidden group cursor-pointer border border-white/10", card.color)}
-              onClick={() => addToast(`Viewing details for ${card.name}`, 'info')}
-            >
-              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="flex justify-between items-start">
-                <span className="text-[9px] font-bold tracking-widest">{card.bank}</span>
-                <span className="text-[9px] font-bold">{card.network}</span>
+        <div className="flex gap-4 overflow-x-auto pb-4 noscrollbar perspective-1000">
+          {userCards.map(card => {
+            const isFlipped = flippedCardId === card.id;
+            
+            return (
+              <div 
+                key={card.id}
+                className="w-56 h-32 flex-shrink-0 relative cursor-pointer group"
+                onClick={() => setFlippedCardId(isFlipped ? null : card.id)}
+                style={{ perspective: '1000px' }}
+              >
+                <motion.div
+                  className="w-full h-full relative"
+                  initial={false}
+                  animate={{ rotateY: isFlipped ? 180 : 0 }}
+                  transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  {/* Front View */}
+                  <div 
+                    className={cn(
+                      "absolute inset-0 w-full h-full rounded-xl p-4 shadow-xl border border-nudge-border bg-gradient-to-br flex flex-col justify-between backface-hidden",
+                      card.color
+                    )}
+                  >
+                    <div className="flex justify-between items-start">
+                      <span className="text-[10px] font-bold tracking-widest opacity-80">{card.bank}</span>
+                      <span className="text-[10px] font-bold">{card.network}</span>
+                    </div>
+                    <div>
+                      <div className="w-7 h-5 bg-yellow-400/80 rounded shadow-inner mb-2" />
+                      <div className="text-sm tracking-[0.25em] font-mono mb-2 text-nudge-primary-text/90">•••• {card.last4}</div>
+                      <div className="flex justify-between items-end">
+                        <p className="text-[10px] tracking-widest font-bold uppercase truncate pr-2 opacity-80">{profile.name}</p>
+                        <p className="text-[10px] font-bold opacity-80">{card.expiryDate}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Back View */}
+                  <div 
+                    className={cn(
+                      "absolute inset-0 w-full h-full rounded-xl shadow-xl border border-nudge-border bg-gradient-to-br flex flex-col items-stretch backface-hidden",
+                      card.color
+                    )}
+                    style={{ transform: 'rotateY(180deg)' }}
+                  >
+                    <div className="h-7 bg-nudge-inverse/80 w-full mt-4" />
+                    <div className="px-4 mt-3">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-6 bg-nudge-inverse/10 rounded flex items-center justify-end px-2">
+                          <span className="text-[10px] font-mono italic text-nudge-secondary-text">authorized signature</span>
+                        </div>
+                        <div className="w-10 h-6 bg-white rounded flex items-center justify-center">
+                          <span className="text-[10px] font-bold text-black font-mono">{card.cvv}</span>
+                        </div>
+                      </div>
+                      <div className="mt-3 space-y-1">
+                        <p className="text-[6px] opacity-40 leading-none">This card is property of {card.bank}. If found, please return to any branch.</p>
+                        <p className="text-[6px] opacity-40 leading-none">Customer Service: 1-800-NUDGE-AI</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-              <div>
-                <div className="w-5 h-4 bg-yellow-400/80 rounded mb-1.5" />
-                <div className="text-xs tracking-[0.2em] font-mono mb-1">•••• {card.last4}</div>
-                <div className="flex justify-between items-end">
-                  <p className="text-[8px] tracking-widest font-bold truncate pr-2">{profile.name}</p>
-                  <p className="text-[8px] font-bold">{card.expiryDate}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-          <button className="w-48 h-28 rounded-lg flex-shrink-0 border border-dashed border-white/20 flex flex-col items-center justify-center hover:bg-white/5 transition-colors gap-2 text-gray-400 hover:text-white">
-            <Plus className="w-5 h-5" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">Add Card</span>
+            );
+          })}
+          <button className="w-56 h-32 rounded-xl flex-shrink-0 border border-dashed border-nudge-border flex flex-col items-center justify-center hover:bg-nudge-inverse/10 transition-all gap-2 text-nudge-secondary-text hover:text-nudge-primary-text group">
+            <Plus className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Connect New Card</span>
           </button>
         </div>
       </div>
@@ -275,9 +321,9 @@ export default function CreditIntel({ profile, transactions }: Props) {
         <div className="flex-[1] flex flex-col gap-3 min-h-0">
           
           {/* Reward Engine */}
-          <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 flex flex-col min-h-0 backdrop-blur-md">
+          <div className="card-glass flex-1 flex flex-col min-h-0 p-4">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-bold flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-accent-400" /> Optimization Engine</h3>
+              <h3 className="text-sm font-bold flex items-center gap-1.5"><Sparkles className="w-4 h-4 text-accent-400" /> Optimization Engine</h3>
               <button onClick={handleOptimize} disabled={isOptimizing} className="px-2 py-1 bg-action text-white rounded text-[10px] font-bold disabled:opacity-50">
                 {isOptimizing ? 'Analyzing...' : 'Maximize'}
               </button>
@@ -285,17 +331,17 @@ export default function CreditIntel({ profile, transactions }: Props) {
             <div className="flex-1 overflow-y-auto space-y-2">
               {!optimizationResults && !isOptimizing && (
                 <div className="h-full flex items-center justify-center text-center p-4">
-                  <p className="text-[10px] text-gray-500">Run optimization to see the best card for every expense category.</p>
+                  <p className="text-[10px] text-nudge-secondary-text">Run optimization to see the best card for every expense category.</p>
                 </div>
               )}
               {optimizationResults?.map((res: any, i: number) => (
                 <div key={i} className="p-2 border border-accent-500/10 bg-accent-500/5 rounded-lg flex justify-between items-center">
                   <div>
-                    <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{res.category}</p>
-                    <p className="text-[11px] font-bold text-white leading-tight">{res.card}</p>
-                    <p className="text-[9px] text-accent-400">{res.reason}</p>
+                    <p className="text-[10px] font-bold text-nudge-secondary-text uppercase tracking-widest">{res.category}</p>
+                    <p className="text-sm font-bold text-nudge-primary-text leading-tight">{res.card}</p>
+                    <p className="text-[10px] text-accent-400">{res.reason}</p>
                   </div>
-                  <div className="bg-emerald-500/20 text-emerald-400 text-[9px] font-bold px-1.5 py-0.5 rounded ml-2 whitespace-nowrap">
+                  <div className="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-1.5 py-0.5 rounded ml-2 whitespace-nowrap">
                     {res.impact}
                   </div>
                 </div>
@@ -304,40 +350,40 @@ export default function CreditIntel({ profile, transactions }: Props) {
           </div>
 
           {/* Points Transfer */}
-          <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 flex flex-col min-h-0 backdrop-blur-md">
+          <div className="card-glass flex-1 flex flex-col min-h-0 p-4">
              <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xs font-bold flex items-center gap-1.5"><ArrowRightLeft className="w-3.5 h-3.5 text-emerald-400" /> Smart Transfer</h3>
+              <h3 className="text-sm font-bold flex items-center gap-1.5"><ArrowRightLeft className="w-4 h-4 text-emerald-400" /> Smart Transfer</h3>
               <button onClick={handleTransferAdvice} disabled={isTransferring} className="px-2 py-1 border border-emerald-500/20 text-emerald-400 bg-emerald-500/10 rounded text-[10px] font-bold hover:bg-emerald-500/20 disabled:opacity-50">
                 Best Option
               </button>
             </div>
             
             <div className="flex gap-2 mb-3">
-              <div className="flex-1 py-1.5 bg-white/5 border border-white/5 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-white/10">
-                <Plane className="w-3.5 h-3.5 text-gray-400 mb-1" /><span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Flights</span>
+              <div className="flex-1 py-1.5 bg-nudge-inverse/10 border border-nudge-border rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-nudge-inverse/10">
+                <Plane className="w-4 h-4 text-nudge-secondary-text mb-1" /><span className="text-[8px] font-bold text-nudge-secondary-text uppercase tracking-widest">Flights</span>
               </div>
-              <div className="flex-1 py-1.5 bg-white/5 border border-white/5 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-white/10">
-                <Building className="w-3.5 h-3.5 text-gray-400 mb-1" /><span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Hotels</span>
+              <div className="flex-1 py-1.5 bg-nudge-inverse/10 border border-nudge-border rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-nudge-inverse/10">
+                <Building className="w-4 h-4 text-nudge-secondary-text mb-1" /><span className="text-[8px] font-bold text-nudge-secondary-text uppercase tracking-widest">Hotels</span>
               </div>
-              <div className="flex-1 py-1.5 bg-white/5 border border-white/5 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-white/10">
-                <Gift className="w-3.5 h-3.5 text-gray-400 mb-1" /><span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Cards</span>
+              <div className="flex-1 py-1.5 bg-nudge-inverse/10 border border-nudge-border rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-nudge-inverse/10">
+                <Gift className="w-4 h-4 text-nudge-secondary-text mb-1" /><span className="text-[8px] font-bold text-nudge-secondary-text uppercase tracking-widest">Cards</span>
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto">
               {!transferAdvice && !isTransferring && (
-                <div className="h-full flex items-center justify-center border border-white/5 border-dashed rounded-lg">
-                  <p className="text-[10px] text-gray-500 px-4 text-center">Let AI find the best value for your 45K points.</p>
+                <div className="h-full flex items-center justify-center border border-nudge-border border-dashed rounded-lg">
+                  <p className="text-[10px] text-nudge-secondary-text px-4 text-center">Let AI find the best value for your 45K points.</p>
                 </div>
               )}
               {transferAdvice && (
                 <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
                   <div className="flex justify-between items-center mb-1">
-                    <h4 className="text-[11px] font-bold text-emerald-400">{transferAdvice.recommendation}</h4>
+                    <h4 className="text-sm font-bold text-emerald-400">{transferAdvice.recommendation}</h4>
                     <span className="px-1 py-0.5 bg-emerald-500/20 text-emerald-400 text-[8px] font-bold rounded">{transferAdvice.valueMultiplier} Value</span>
                   </div>
-                  <p className="text-[9px] text-gray-300 mb-2 leading-relaxed">{transferAdvice.details}</p>
-                  <button className="w-full py-1.5 bg-emerald-600/80 text-white rounded text-[10px] font-bold flex items-center justify-center gap-1 hover:bg-emerald-500">
+                  <p className="text-[10px] text-nudge-secondary-text mb-2 leading-relaxed">{transferAdvice.details}</p>
+                  <button className="w-full py-1.5 bg-emerald-600/80 text-nudge-primary-text rounded text-[10px] font-bold flex items-center justify-center gap-1 hover:bg-emerald-500">
                     {transferAdvice.action} <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
@@ -347,10 +393,10 @@ export default function CreditIntel({ profile, transactions }: Props) {
         </div>
 
         {/* Right Col: Market Intelligence */}
-        <div className="flex-[1] bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 flex flex-col min-h-0 backdrop-blur-md">
+        <div className="card-glass flex-[1] flex flex-col min-h-0 p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-bold flex items-center gap-1.5"><Search className="w-3.5 h-3.5 text-accent-400" /> Market Check</h3>
-            <button onClick={fetchMarketCards} disabled={isFetchingMarket} className="px-2 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-bold hover:bg-white/10 flex items-center gap-1 disabled:opacity-50">
+            <h3 className="text-sm font-bold flex items-center gap-1.5"><Search className="w-4 h-4 text-accent-400" /> Market Check</h3>
+            <button onClick={fetchMarketCards} disabled={isFetchingMarket} className="px-2 py-1 bg-nudge-inverse/10 border border-nudge-border rounded text-[10px] font-bold hover:bg-nudge-inverse/10 flex items-center gap-1 disabled:opacity-50">
               {isFetchingMarket ? <Loader2 className="w-3 h-3 animate-spin"/> : <RefreshCw className="w-3 h-3"/>}
               Refresh
             </button>
@@ -359,29 +405,29 @@ export default function CreditIntel({ profile, transactions }: Props) {
           <div className="flex-1 overflow-y-auto space-y-3">
             {!isFetchingMarket && marketCards.length === 0 && (
               <div className="h-full flex flex-col items-center justify-center text-center p-4">
-                <Search className="w-8 h-8 text-white/10 mb-2" />
-                <p className="text-[10px] text-gray-500">Scan market for premium credit card offers tailored to you.</p>
+                <Search className="w-8 h-8 text-nudge-secondary-text mb-2" />
+                <p className="text-[10px] text-nudge-secondary-text">Scan market for premium credit card offers tailored to you.</p>
               </div>
             )}
             {marketCards.map((card) => (
-               <div key={card.id} className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all cursor-pointer">
+               <div key={card.id} className="p-3 bg-nudge-inverse/10 border border-nudge-border rounded-xl hover:bg-nudge-inverse/10 transition-all cursor-pointer">
                  <div className="flex gap-3">
-                   <div className={cn("w-14 h-10 rounded shadow-md bg-gradient-to-br flex-shrink-0 border border-white/10", card.color)} />
+                   <div className={cn("w-14 h-10 rounded shadow-md bg-gradient-to-br flex-shrink-0 border border-nudge-border", card.color)} />
                    <div className="flex-1 min-w-0">
-                     <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest leading-none">{card.bank}</p>
-                     <p className="text-xs font-bold truncate leading-tight mt-0.5">{card.name}</p>
+                     <p className="text-[8px] text-nudge-secondary-text font-bold uppercase tracking-widest leading-none">{card.bank}</p>
+                     <p className="text-sm font-bold truncate leading-tight mt-0.5">{card.name}</p>
                      <span className="inline-flex items-center gap-0.5 mt-1 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 text-[8px] font-bold rounded">
-                       <Sparkles className="w-2.5 h-2.5" /> {card.matchScore}% Match
+                       <Sparkles className="w-3 h-3" /> {card.matchScore}% Match
                      </span>
                    </div>
                  </div>
-                 <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between">
+                 <div className="mt-2.5 pt-2 border-t border-nudge-border flex items-center justify-between">
                    <span className="text-[10px] font-bold">{formatCurrency(card.annualFee)}/yr</span>
-                   <span className="text-[9px] text-accent-400 font-medium truncate">{card.eligibility}</span>
+                   <span className="text-[10px] text-accent-400 font-medium truncate">{card.eligibility}</span>
                  </div>
                  <ul className="mt-2 space-y-1">
                    {card.benefits.map((b, i) => (
-                     <li key={i} className="text-[9px] text-gray-400 flex items-center gap-1.5"><CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" /> {b}</li>
+                     <li key={i} className="text-[10px] text-nudge-secondary-text flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> {b}</li>
                    ))}
                  </ul>
                </div>
@@ -393,8 +439,8 @@ export default function CreditIntel({ profile, transactions }: Props) {
       <div className="fixed bottom-6 right-6 z-[200] space-y-2 pointer-events-none">
         <AnimatePresence>
           {toasts.map((toast) => (
-            <motion.div key={toast.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className={cn("pointer-events-auto px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 min-w-[200px] backdrop-blur-xl border text-[11px]", toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" : toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" : "bg-accent-500/20 border-accent-500/20 text-accent-400")}>
-              {toast.type === 'success' ? <CheckCircle2 className="w-3.5 h-3.5" /> : toast.type === 'error' ? <X className="w-3.5 h-3.5" /> : <Info className="w-3.5 h-3.5" />}
+            <motion.div key={toast.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className={cn("pointer-events-auto px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 min-w-[200px] backdrop-blur-xl border text-xs", toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" : toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" : "bg-accent-500/20 border-accent-500/20 text-accent-400")}>
+              {toast.type === 'success' ? <CheckCircle2 className="w-4 h-4" /> : toast.type === 'error' ? <X className="w-4 h-4" /> : <Info className="w-4 h-4" />}
               <span className="font-bold">{toast.message}</span>
             </motion.div>
           ))}

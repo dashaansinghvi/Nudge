@@ -60,14 +60,14 @@ interface Toast {
 const Toggle = memo(({ enabled, onChange, label, icon: Icon }: { enabled: boolean, onChange: () => void, label: string, icon?: any }) => (
   <div className="flex items-center justify-between py-3">
     <div className="flex items-center gap-3">
-      {Icon && <Icon className="w-4 h-4 text-nudge-secondary" />}
-      <span className="text-nudge-primary font-medium">{label}</span>
+      {Icon && <Icon className="w-4 h-4 text-nudge-secondary-text" />}
+      <span className="text-nudge-primary-text font-medium">{label}</span>
     </div>
     <button
       onClick={onChange}
       className={cn(
         "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none",
-        enabled ? "bg-accent-600" : "bg-white/10"
+        enabled ? "bg-accent-600" : "bg-nudge-inverse/10"
       )}
     >
       <span
@@ -92,8 +92,8 @@ const Section = memo(({ title, icon: Icon, children, description }: { title: str
         <Icon className="w-5 h-5 text-accent-400" />
       </div>
       <div>
-        <h3 className="text-base font-bold tracking-tight text-nudge-primary">{title}</h3>
-        {description && <p className="text-xs text-nudge-secondary">{description}</p>}
+        <h3 className="text-base font-bold tracking-tight text-nudge-primary-text">{title}</h3>
+        {description && <p className="text-xs text-nudge-secondary-text">{description}</p>}
       </div>
     </div>
     <div className="space-y-3">
@@ -120,16 +120,16 @@ const CustomSelect = memo(({ value, onChange, options, label }: { value: string,
 
   return (
     <div className="space-y-2 relative" ref={dropdownRef}>
-      {label && <label className="text-xs font-bold text-nudge-secondary uppercase tracking-widest">{label}</label>}
+      {label && <label className="text-xs font-bold text-nudge-secondary-text uppercase tracking-widest">{label}</label>}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-full flex items-center justify-between bg-[#1a1c2e] border rounded-2xl px-4 py-3 focus:outline-none transition-all text-left shadow-lg shadow-black/20 group",
-          isOpen ? "border-accent-500 ring-4 ring-accent-500/10" : "border-white/10 hover:border-white/20"
+          isOpen ? "border-accent-500 ring-4 ring-accent-500/10" : "border-nudge-border hover:border-nudge-border"
         )}
       >
-        <span className="text-white font-medium">{selectedOption.label}</span>
-        <ChevronDown className={cn("w-4 h-4 text-white/40 transition-transform duration-300", isOpen && "rotate-180")} />
+        <span className="text-nudge-primary-text font-medium">{selectedOption.label}</span>
+        <ChevronDown className={cn("w-4 h-4 text-nudge-secondary-text transition-transform duration-300", isOpen && "rotate-180")} />
       </button>
 
       <AnimatePresence>
@@ -149,11 +149,11 @@ const CustomSelect = memo(({ value, onChange, options, label }: { value: string,
                 }}
                 className={cn(
                   "w-full px-4 py-3 text-left transition-all flex items-center justify-between",
-                  value === option.value ? "bg-accent-600 text-white font-bold" : "text-white/70 hover:bg-white/10 hover:text-white"
+                  value === option.value ? "bg-accent-600 text-nudge-primary-text font-bold" : "text-nudge-primary-text hover:bg-nudge-inverse/10 hover:text-nudge-primary-text"
                 )}
               >
                 <span>{option.label}</span>
-                {value === option.value && <Check className="w-4 h-4 text-white" />}
+                {value === option.value && <Check className="w-4 h-4 text-nudge-primary-text" />}
               </button>
             ))}
           </motion.div>
@@ -326,8 +326,8 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
       </div>
 
       <header className="flex-shrink-0 mb-3">
-        <h1 className="text-2xl font-bold tracking-tight mb-0.5 text-nudge-primary">Settings</h1>
-        <p className="text-nudge-secondary text-xs">Manage your account, security, and AI preferences.</p>
+        <h1 className="text-2xl font-bold tracking-tight mb-0.5 text-nudge-primary-text">Settings</h1>
+        <p className="text-nudge-secondary-text text-xs">Manage your account, security, and AI preferences.</p>
       </header>
 
       <div className="flex flex-col lg:flex-row gap-4 flex-1 min-h-0">
@@ -348,7 +348,7 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
               onClick={() => setActiveTab(tab.id)}
               className={cn(
                 "w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all font-medium whitespace-nowrap lg:whitespace-normal text-left text-sm",
-                activeTab === tab.id ? "bg-accent-600/20 text-accent-400" : "text-nudge-secondary hover:text-nudge-primary hover:bg-white/5"
+                activeTab === tab.id ? "bg-accent-600/20 text-accent-400" : "text-nudge-secondary-text hover:text-nudge-primary-text hover:bg-nudge-inverse/10"
               )}
             >
               <tab.icon className="w-4 h-4 flex-shrink-0" />
@@ -364,13 +364,13 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
           <div className="space-y-8">
             {/* Mode Switcher */}
             <div>
-              <h4 className="text-[10px] font-bold text-nudge-secondary uppercase tracking-[0.2em] mb-4">Interface Mode</h4>
-              <div className="grid grid-cols-2 p-1 bg-white/5 border border-white/5 rounded-2xl">
+              <h4 className="text-[10px] font-bold text-nudge-secondary-text uppercase tracking-[0.2em] mb-4">Interface Mode</h4>
+              <div className="grid grid-cols-2 p-1 bg-nudge-inverse/10 border border-nudge-border rounded-2xl">
                 <button 
                   onClick={() => { updateSettings({ theme: 'light' }); addToast('Light mode enabled'); }}
                   className={cn(
                     "flex items-center justify-center gap-2.5 py-3 rounded-xl transition-all",
-                    theme === 'light' ? "bg-white text-black shadow-xl" : "text-white/40 hover:text-white/70"
+                    theme === 'light' ? "bg-white text-black shadow-xl" : "text-nudge-secondary-text hover:text-nudge-primary-text"
                   )}
                 >
                   <Sun className="w-4 h-4" />
@@ -380,7 +380,7 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
                   onClick={() => { updateSettings({ theme: 'dark' }); addToast('Dark mode enabled'); }}
                   className={cn(
                     "flex items-center justify-center gap-2.5 py-3 rounded-xl transition-all",
-                    theme === 'dark' ? "bg-accent-600 text-white shadow-xl" : "text-white/40 hover:text-white/70"
+                    theme === 'dark' ? "bg-accent-600 text-nudge-primary-text shadow-xl" : "text-nudge-secondary-text hover:text-nudge-primary-text"
                   )}
                 >
                   <Moon className="w-4 h-4" />
@@ -390,20 +390,20 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
             </div>
 
             {/* Effects */}
-            <div className="pt-6 border-t border-white/5">
+            <div className="pt-6 border-t border-nudge-border">
               <Toggle 
                 label="Enable Advanced Gradients" 
                 enabled={enableGradients} 
                 onChange={() => updateSettings({ enableGradients: !enableGradients })} 
                 icon={Zap}
               />
-              <p className="text-[10px] text-nudge-secondary ml-7 -mt-1">Adds depth with multi-stop brand gradients and glass effects.</p>
+              <p className="text-[10px] text-nudge-secondary-text ml-7 -mt-1">Adds depth with multi-stop brand gradients and glass effects.</p>
             </div>
 
             {/* Color Presets */}
-            <div className="pt-6 border-t border-white/5">
+            <div className="pt-6 border-t border-nudge-border">
               <div className="flex items-center justify-between mb-4">
-                <h4 className="text-[10px] font-bold text-nudge-secondary uppercase tracking-[0.2em]">Brand Accents</h4>
+                <h4 className="text-[10px] font-bold text-nudge-secondary-text uppercase tracking-[0.2em]">Brand Accents</h4>
                 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-accent-500/10 border border-accent-500/20">
                    <div className="w-1.5 h-1.5 rounded-full bg-accent-500" />
                    <span className="text-[8px] font-bold text-accent-400 uppercase">Live</span>
@@ -424,7 +424,7 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
                     onClick={() => updateSettings({ accentColor: color.primary, secondaryColor: color.secondary })}
                     className={cn(
                       "group relative h-12 rounded-xl transition-all overflow-hidden border-2",
-                      accentColor === color.primary ? "border-white" : "border-transparent hover:border-white/20"
+                      accentColor === color.primary ? "border-white" : "border-transparent hover:border-nudge-border"
                     )}
                     title={color.name}
                   >
@@ -433,8 +433,8 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
                       <div className="flex-1 opacity-60" style={{ backgroundColor: color.secondary }} />
                     </div>
                     {accentColor === color.primary && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                        <Check className="w-4 h-4 text-white" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-nudge-inverse/20">
+                        <Check className="w-4 h-4 text-nudge-primary-text" />
                       </div>
                     )}
                   </button>
@@ -443,12 +443,12 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
             </div>
 
             {/* Custom Build */}
-            <div className="pt-6 border-t border-white/5">
-              <h4 className="text-[10px] font-bold text-nudge-secondary uppercase tracking-[0.2em] mb-4">Custom Laboratory</h4>
-              <div className="bg-white/[0.02] border border-white/5 p-4 rounded-3xl flex items-center justify-between">
+            <div className="pt-6 border-t border-nudge-border">
+              <h4 className="text-[10px] font-bold text-nudge-secondary-text uppercase tracking-[0.2em] mb-4">Custom Laboratory</h4>
+              <div className="bg-white/[0.02] border border-nudge-border p-4 rounded-3xl flex items-center justify-between">
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-3">
-                    <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-white/10">
+                    <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-nudge-border">
                       <input
                         type="color"
                         value={accentColor || '#1a8fff'}
@@ -457,10 +457,10 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
                       />
                       <div className="w-full h-full pointer-events-none" style={{ backgroundColor: accentColor || '#1a8fff' }} />
                     </div>
-                    <span className="text-xs font-medium text-white/60">Primary</span>
+                    <span className="text-xs font-medium text-nudge-secondary-text">Primary</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-white/10">
+                    <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-nudge-border">
                       <input
                         type="color"
                         value={secondaryColor || '#00d4aa'}
@@ -469,12 +469,12 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
                       />
                       <div className="w-full h-full pointer-events-none" style={{ backgroundColor: secondaryColor || '#00d4aa' }} />
                     </div>
-                    <span className="text-xs font-medium text-white/60">Secondary</span>
+                    <span className="text-xs font-medium text-nudge-secondary-text">Secondary</span>
                   </div>
                 </div>
                 <button 
                   onClick={() => updateSettings({ accentColor: '#1a8fff', secondaryColor: '#00d4aa' })}
-                  className="p-2 text-white/30 hover:text-white transition-colors"
+                  className="p-2 text-nudge-secondary-text hover:text-nudge-primary-text transition-colors"
                   title="Reset to defaults"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
@@ -494,35 +494,35 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
               <div className="w-24 h-24 rounded-full bg-accent-600/20 flex items-center justify-center border-2 border-dashed border-accent-500/50 overflow-hidden">
                 {localProfile.photoUrl ? <img src={localProfile.photoUrl} alt="Profile" className="w-full h-full object-cover" /> : <User className="w-10 h-10 text-accent-400" />}
               </div>
-              <button onClick={() => fileInputRef.current?.click()} className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
-                <Camera className="w-6 h-6 text-white" />
+              <button onClick={() => fileInputRef.current?.click()} className="absolute inset-0 bg-nudge-inverse/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
+                <Camera className="w-6 h-6 text-nudge-primary-text" />
               </button>
             </div>
             <div>
-              <h4 className="font-bold text-lg text-nudge-primary">{localProfile.name}</h4>
-              <p className="text-sm text-nudge-secondary">Personal Account</p>
+              <h4 className="font-bold text-lg text-nudge-primary-text">{localProfile.name}</h4>
+              <p className="text-sm text-nudge-secondary-text">Personal Account</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-nudge-secondary uppercase tracking-widest">Full Name</label>
+              <label className="text-xs font-bold text-nudge-secondary-text uppercase tracking-widest">Full Name</label>
               <input 
                 type="text" 
                 value={localProfile.name}
                 onChange={(e) => setLocalProfile({ ...localProfile, name: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 transition-all text-nudge-primary"
+                className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 transition-all text-nudge-primary-text"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-nudge-secondary uppercase tracking-widest">Age</label>
+                <label className="text-xs font-bold text-nudge-secondary-text uppercase tracking-widest">Age</label>
                 <input 
                   type="number" 
                   value={localProfile.age || ''}
                   onChange={(e) => setLocalProfile({ ...localProfile, age: Number(e.target.value) })}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 transition-all text-nudge-primary"
+                  className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 transition-all text-nudge-primary-text"
                 />
                 </div>
                 <CustomSelect 
@@ -699,23 +699,23 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-nudge-secondary uppercase tracking-widest">Monthly Budget</label>
+                <label className="text-xs font-bold text-nudge-secondary-text uppercase tracking-widest">Monthly Budget</label>
                 <input 
                   type="number" 
                   value={localBudget}
                   onChange={(e) => setLocalBudget(e.target.value)}
                   onBlur={handleBudgetBlur}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 transition-all text-nudge-primary"
+                  className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 transition-all text-nudge-primary-text"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-nudge-secondary uppercase tracking-widest">Savings Goal</label>
+                <label className="text-xs font-bold text-nudge-secondary-text uppercase tracking-widest">Savings Goal</label>
                 <input 
                   type="number" 
                   value={localSavings}
                   onChange={(e) => setLocalSavings(e.target.value)}
                   onBlur={handleSavingsBlur}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 transition-all text-nudge-primary"
+                  className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 transition-all text-nudge-primary-text"
                 />
               </div>
             </div>
@@ -773,10 +773,10 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
               />
             <button 
               onClick={() => setActiveModal('password')}
-              className="w-full flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group"
+              className="w-full flex items-center justify-between p-4 bg-nudge-inverse/10 border border-nudge-border rounded-2xl hover:bg-nudge-inverse/10 transition-all group"
             >
-              <span className="font-medium text-nudge-primary">Change Password</span>
-              <ChevronRight className="w-5 h-5 text-nudge-secondary group-hover:text-nudge-primary transition-colors" />
+              <span className="font-medium text-nudge-primary-text">Change Password</span>
+              <ChevronRight className="w-5 h-5 text-nudge-secondary-text group-hover:text-nudge-primary-text transition-colors" />
             </button>
           </div>
         </Section>
@@ -797,7 +797,7 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
             </button>
             <button 
               onClick={() => addToast('Backup created successfully')}
-              className="flex items-center justify-center gap-2 py-4 bg-white/5 border border-white/10 text-nudge-primary rounded-2xl font-bold hover:bg-white/10 transition-all"
+              className="flex items-center justify-center gap-2 py-4 bg-nudge-inverse/10 border border-nudge-border text-nudge-primary-text rounded-2xl font-bold hover:bg-nudge-inverse/10 transition-all"
             >
               <Database className="w-5 h-5" />
               Backup Data
@@ -812,13 +812,13 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
           <div className="space-y-3">
             <button 
               onClick={handleDownloadData}
-              className="w-full flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group"
+              className="w-full flex items-center justify-between p-4 bg-nudge-inverse/10 border border-nudge-border rounded-2xl hover:bg-nudge-inverse/10 transition-all group"
             >
               <div className="flex items-center gap-3">
                 <Download className="w-5 h-5 text-accent-400" />
-                <span className="font-medium text-nudge-primary">Download My Data</span>
+                <span className="font-medium text-nudge-primary-text">Download My Data</span>
               </div>
-              <ChevronRight className="w-5 h-5 text-nudge-secondary group-hover:text-nudge-primary transition-colors" />
+              <ChevronRight className="w-5 h-5 text-nudge-secondary-text group-hover:text-nudge-primary-text transition-colors" />
             </button>
             <button 
               onClick={() => setActiveModal('delete')}
@@ -845,25 +845,25 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveModal(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-nudge-inverse/80 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-nudge-secondary border border-nudge rounded-[32px] p-8 shadow-2xl"
+              className="relative w-full max-w-md bg-nudge-secondary border border-nudge-border rounded-[32px] p-8 shadow-2xl"
             >
               {activeModal === 'password' ? (
                 <div className="space-y-6">
-                  <h3 className="text-2xl font-bold text-nudge-primary">Change Password</h3>
-                  <p className="text-nudge-secondary text-sm">Enter your current password and a new one to update your security.</p>
+                  <h3 className="text-2xl font-bold text-nudge-primary-text">Change Password</h3>
+                  <p className="text-nudge-secondary-text text-sm">Enter your current password and a new one to update your security.</p>
                   <div className="space-y-4">
-                    <input type="password" placeholder="Current Password" className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 text-nudge-primary" />
-                    <input type="password" placeholder="New Password" className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 text-nudge-primary" />
-                    <input type="password" placeholder="Confirm New Password" className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 text-nudge-primary" />
+                    <input type="password" placeholder="Current Password" className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 text-nudge-primary-text" />
+                    <input type="password" placeholder="New Password" className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 text-nudge-primary-text" />
+                    <input type="password" placeholder="Confirm New Password" className="w-full bg-nudge-inverse/10 border border-nudge-border rounded-2xl px-4 py-3 focus:outline-none focus:border-accent-500 text-nudge-primary-text" />
                   </div>
                   <div className="flex gap-3">
-                    <button onClick={() => setActiveModal(null)} className="flex-1 py-3 bg-white/5 rounded-2xl font-bold hover:bg-white/10 transition-all text-nudge-primary">Cancel</button>
+                    <button onClick={() => setActiveModal(null)} className="flex-1 py-3 bg-nudge-inverse/10 rounded-2xl font-bold hover:bg-nudge-inverse/10 transition-all text-nudge-primary-text">Cancel</button>
                     <button onClick={() => { setActiveModal(null); addToast('Password updated'); }} className="flex-1 py-3 bg-accent-600 rounded-2xl font-bold hover:bg-accent-500 transition-all text-white">Update</button>
                   </div>
                 </div>
@@ -873,11 +873,11 @@ export default function Settings({ profile, transactions, onUpdateProfile }: Pro
                     <AlertTriangle className="w-8 h-8 text-rose-500" />
                   </div>
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold mb-2 text-nudge-primary">Delete Account?</h3>
-                    <p className="text-nudge-secondary text-sm">This action is permanent and cannot be undone. All your financial data will be wiped from our servers.</p>
+                    <h3 className="text-2xl font-bold mb-2 text-nudge-primary-text">Delete Account?</h3>
+                    <p className="text-nudge-secondary-text text-sm">This action is permanent and cannot be undone. All your financial data will be wiped from our servers.</p>
                   </div>
                   <div className="flex gap-3">
-                    <button onClick={() => setActiveModal(null)} className="flex-1 py-3 bg-white/5 rounded-2xl font-bold hover:bg-white/10 transition-all text-nudge-primary">Keep Account</button>
+                    <button onClick={() => setActiveModal(null)} className="flex-1 py-3 bg-nudge-inverse/10 rounded-2xl font-bold hover:bg-nudge-inverse/10 transition-all text-nudge-primary-text">Keep Account</button>
                     <button onClick={() => { setActiveModal(null); addToast('Account deletion requested', 'error'); }} className="flex-1 py-3 bg-rose-600 rounded-2xl font-bold hover:bg-rose-500 transition-all text-white">Delete Forever</button>
                   </div>
                 </div>
