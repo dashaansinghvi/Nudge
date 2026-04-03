@@ -17,7 +17,11 @@ import {
   PieChart as PieChartIcon,
   Zap,
   Receipt,
-  Briefcase
+  Briefcase,
+  ChevronLeft,
+  ChevronRight,
+  Home as HomeIcon,
+  FileText
 } from 'lucide-react';
 import { 
   onAuthStateChanged, 
@@ -43,6 +47,7 @@ import { auth, db, googleProvider } from './firebase';
 import { UserProfile, Transaction, OperationType, FirestoreErrorInfo } from './types';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { useSettings } from './context/SettingsContext';
+import NudgeLogo from './components/NudgeLogo';
 
 // Lazy Loaded Components
 const DashboardView = lazy(() => import('./components/DashboardView'));
@@ -54,21 +59,28 @@ const FraudDetection = lazy(() => import('./components/FraudDetection'));
 const TaxAssistant = lazy(() => import('./components/TaxAssistant'));
 const BillOptimizer = lazy(() => import('./components/BillOptimizer'));
 const InvestmentIntel = lazy(() => import('./components/InvestmentIntel'));
+const FinancialIntelView = lazy(() => import('./components/FinancialIntelView'));
 const Onboarding = lazy(() => import('./components/Onboarding'));
+const Home = lazy(() => import('./components/Home'));
+const ReportsView = lazy(() => import('./components/ReportsView'));
 
+
+import { QuestionnaireResult } from './components/Questionnaire';
+import LandingPage from './components/LandingPage';
 import { DataProvider } from './context/DataContext';
 
 const TABS = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'expense-ai', label: 'Expense AI', icon: TrendingUp },
-  { id: 'fraud', label: 'Fraud Detection', icon: ShieldAlert },
-  { id: 'credit', label: 'Credit Intel', icon: CreditCard },
-  { id: 'tax', label: 'Tax Assistant', icon: ReceiptText },
-  { id: 'bills', label: 'Bill Optimizer', icon: Receipt },
-  { id: 'invest', label: 'Investment Intel', icon: Briefcase },
-  { id: 'chat', label: 'AI Chat', icon: MessageSquare },
-  { id: 'settings', label: 'Settings', icon: SettingsIcon },
+  { id: 'home', label: 'Home', icon: HomeIcon, category: 'Overview' },
+  { id: 'dashboard', label: 'Analytics', icon: LayoutDashboard, category: 'Overview' },
+  
+  { id: 'intel', label: 'Financial Intel', icon: Zap, category: 'Intelligence' },
+  
+  { id: 'fraud', label: 'Fraud Detection', icon: ShieldAlert, category: 'Security & AI' },
+  { id: 'chat', label: 'AI Chat', icon: MessageSquare, category: 'Security & AI' },
+  
+  { id: 'settings', label: 'Settings', icon: SettingsIcon, category: 'Account' },
 ];
+
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-full min-h-[400px]">
@@ -76,7 +88,7 @@ const LoadingSpinner = () => (
       animate={{ rotate: 360 }}
       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
     >
-      <RefreshCw className="w-8 h-8 text-indigo-500 opacity-50" />
+      <RefreshCw className="w-8 h-8 text-accent-500 opacity-50" />
     </motion.div>
   </div>
 );
@@ -86,7 +98,8 @@ export default function App() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('home');
+  const [intelSubTab, setIntelSubTab] = useState('expense-ai');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   
@@ -95,6 +108,7 @@ export default function App() {
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [pendingTestResult, setPendingTestResult] = useState<QuestionnaireResult | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -172,8 +186,11 @@ export default function App() {
     throw new Error(JSON.stringify(errInfo));
   }, []);
 
-  const handleEmailAuth = async (e: React.FormEvent) => {
+  const handleEmailAuth = async (e: React.FormEvent, testResult?: QuestionnaireResult) => {
     e.preventDefault();
+    if (testResult) {
+      setPendingTestResult(testResult);
+    }
     setAuthError(null);
     setIsAuthLoading(true);
     try {
@@ -201,7 +218,15 @@ export default function App() {
   const handleLogout = useCallback(() => signOut(auth), []);
 
   const handleUpdateProfile = useCallback((p: UserProfile) => setProfile(p), []);
-  const handleTabChange = useCallback((id: string) => setActiveTab(id), []);
+  const handleTabChange = useCallback((id: string) => {
+    const intelTabs = ['expense-ai', 'bills', 'tax', 'invest', 'credit'];
+    if (intelTabs.includes(id)) {
+      setIntelSubTab(id);
+      setActiveTab('intel');
+    } else {
+      setActiveTab(id);
+    }
+  }, []);
   const toggleSidebar = useCallback(() => setIsSidebarOpen(prev => !prev), []);
 
   if (loading) {
@@ -211,7 +236,7 @@ export default function App() {
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
-          <RefreshCw className="w-8 h-8 text-indigo-500" />
+          <RefreshCw className="w-8 h-8 text-accent-500" />
         </motion.div>
       </div>
     );
@@ -219,111 +244,35 @@ export default function App() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-nudge-primary text-nudge-primary flex flex-col items-center justify-center p-4 overflow-hidden relative">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 blur-[120px] rounded-full" />
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center z-10"
-        >
-          <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <Zap className="w-10 h-10 text-white" />
-            </div>
-          </div>
-          <h1 className="text-6xl font-bold tracking-tighter mb-4 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Nudge
-          </h1>
-          <p className="text-xl text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">
-            Nudge – Your AI Financial Companion. Smarter Financial Decisions, One Nudge at a Time.
-          </p>
-          
-          <form onSubmit={handleEmailAuth} className="max-w-md mx-auto bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-xl shadow-2xl">
-            <h2 className="text-2xl font-bold mb-6 text-white text-left">
-              {authMode === 'login' ? 'Welcome Back' : 'Create Account'}
-            </h2>
-            
-            {authError && (
-              <div className="mb-6 p-4 bg-rose-500/20 border border-rose-500/50 rounded-xl flex items-start gap-3 text-rose-200 text-left text-sm">
-                <ShieldAlert className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                <span>{authError}</span>
-              </div>
-            )}
-            
-            <div className="space-y-4 mb-8">
-              <div>
-                <input
-                  type="email"
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                />
-              </div>
-              <div>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
-                />
-              </div>
-            </div>
-            
-            <button
-              type="submit"
-              disabled={isAuthLoading}
-              className="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold text-lg hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-500/25 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2"
-            >
-              {isAuthLoading ? (
-                <RefreshCw className="w-5 h-5 animate-spin" />
-              ) : (
-                authMode === 'login' ? 'Sign In' : 'Create Account'
-              )}
-            </button>
-            
-            <div className="mt-8 text-center pt-6 border-t border-white/5">
-              <button
-                type="button"
-                onClick={() => {
-                  setAuthMode(prev => prev === 'login' ? 'signup' : 'login');
-                  setAuthError(null);
-                }}
-                className="text-gray-400 hover:text-white transition-colors text-sm font-medium"
-              >
-                {authMode === 'login' 
-                  ? "Don't have an account? Sign up" 
-                  : "Already have an account? Sign in"}
-              </button>
-            </div>
-          </form>
-        </motion.div>
-      </div>
+      <LandingPage 
+        authMode={authMode}
+        setAuthMode={setAuthMode}
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        authError={authError}
+        isAuthLoading={isAuthLoading}
+        handleEmailAuth={handleEmailAuth}
+        onLoginSetup={() => {}}
+      />
     );
   }
 
   if (!profile) {
     return (
       <Suspense fallback={<LoadingSpinner />}>
-        <Onboarding user={user} onComplete={handleUpdateProfile} />
+        <Onboarding user={user} onComplete={handleUpdateProfile} initialData={pendingTestResult} />
       </Suspense>
     );
   }
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'home': return <Home profile={profile} transactions={transactions} onNavigate={handleTabChange} />;
       case 'dashboard': return <DashboardView profile={profile} transactions={transactions} />;
-      case 'expense-ai': return <ExpenseAI profile={profile} transactions={transactions} onNavigate={handleTabChange} />;
+      case 'intel': return <FinancialIntelView profile={profile} transactions={transactions} onNavigate={handleTabChange} initialTab={intelSubTab} />;
       case 'fraud': return <FraudDetection profile={profile} transactions={transactions} />;
-      case 'tax': return <TaxAssistant profile={profile} />;
-      case 'bills': return <BillOptimizer profile={profile} />;
-      case 'invest': return <InvestmentIntel profile={profile} />;
-      case 'credit': return <CreditIntel profile={profile} transactions={transactions} />;
       case 'chat': return <AIChat profile={profile} transactions={transactions} onNavigate={handleTabChange} />;
       case 'settings': return <Settings profile={profile} transactions={transactions} onUpdateProfile={handleUpdateProfile} />;
       default: return (
@@ -336,65 +285,122 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-nudge-primary text-nudge-primary flex font-sans">
+    <div className="h-screen bg-nudge-primary text-nudge-primary flex font-sans overflow-hidden">
       {/* Sidebar */}
-      <aside 
-        className={`${isSidebarOpen ? 'w-72' : 'w-20'} bg-nudge-secondary border-r border-nudge transition-all duration-300 flex flex-col z-50`}
+      <motion.aside 
+        animate={{ width: isSidebarOpen ? 280 : 80 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        className="bg-nudge-secondary border-r border-white/[0.06] flex flex-col z-50 relative overflow-hidden"
       >
-        <div className="p-6 flex items-center justify-between">
-          {isSidebarOpen && (
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <Zap className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold tracking-tight">Nudge</span>
-            </div>
-          )}
-          <button onClick={toggleSidebar} className="p-2 hover:bg-white/5 rounded-lg">
-            {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        {/* Logo area */}
+        <div className="p-5 flex items-center justify-between min-h-[72px]">
+          <AnimatePresence mode="wait">
+            {isSidebarOpen && (
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <NudgeLogo iconSize={28} textSize="text-lg" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <button 
+            onClick={toggleSidebar} 
+            className="p-2 hover:bg-white/5 rounded-xl transition-colors group"
+          >
+            {isSidebarOpen ? (
+              <ChevronLeft className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
+            )}
           </button>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-2">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleTabChange(tab.id)}
-              className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all ${
-                activeTab === tab.id 
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' 
-                  : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
-              }`}
-            >
-              <tab.icon className="w-5 h-5 flex-shrink-0" />
-              {isSidebarOpen && <span className="font-medium">{tab.label}</span>}
-            </button>
+        {/* Navigation */}
+        <nav className="flex-1 px-3 py-4 space-y-6 overflow-y-auto">
+          {Object.entries(
+            TABS.reduce((acc, tab) => {
+              if (!acc[tab.category]) acc[tab.category] = [];
+              acc[tab.category].push(tab);
+              return acc;
+            }, {} as Record<string, typeof TABS>)
+          ).map(([category, tabs]) => (
+            <div key={category} className="space-y-1">
+              {isSidebarOpen && (
+                <div className="px-4 mb-2 text-[10px] font-bold tracking-widest text-white/30 uppercase">
+                  {category}
+                </div>
+              )}
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`sidebar-item ${
+                    activeTab === tab.id 
+                      ? 'sidebar-item-active' 
+                      : 'sidebar-item-inactive'
+                  }`}
+                  title={!isSidebarOpen ? tab.label : undefined}
+                >
+                  <tab.icon className="w-[18px] h-[18px] flex-shrink-0" />
+                  <AnimatePresence mode="wait">
+                    {isSidebarOpen && (
+                      <motion.span 
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: 'auto' }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="font-medium text-sm whitespace-nowrap overflow-hidden"
+                      >
+                        {tab.label}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </button>
+              ))}
+            </div>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/5">
+        {/* Logout */}
+        <div className="p-3 border-t border-white/[0.04]">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-4 px-4 py-3 text-rose-400 hover:bg-rose-500/10 rounded-2xl transition-all"
+            className="sidebar-item text-rose-400/70 hover:bg-rose-500/8 hover:text-rose-400"
+            title={!isSidebarOpen ? 'Logout' : undefined}
           >
-            <LogOut className="w-5 h-5 flex-shrink-0" />
-            {isSidebarOpen && <span className="font-medium">Logout</span>}
+            <LogOut className="w-[18px] h-[18px] flex-shrink-0" />
+            <AnimatePresence mode="wait">
+              {isSidebarOpen && (
+                <motion.span 
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="font-medium text-sm whitespace-nowrap overflow-hidden"
+                >
+                  Logout
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
         </div>
-      </aside>
+      </motion.aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto relative">
-        <div className="max-w-7xl mx-auto p-8">
+      <main className="flex-1 overflow-hidden relative h-full">
+        <div className="max-w-7xl mx-auto p-4 lg:p-5 h-full">
           <ErrorBoundary>
             <DataProvider initialProfile={profile} initialTransactions={transactions}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
                   className="h-full"
                 >
                   <Suspense fallback={<LoadingSpinner />}>

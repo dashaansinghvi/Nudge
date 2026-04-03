@@ -1,6 +1,9 @@
 export interface UserProfile {
   uid: string;
   name: string;
+  age?: number;
+  sex?: string;
+  photoUrl?: string;
   vitality_score: number;
   balance: number;
   monthly_spending: number;

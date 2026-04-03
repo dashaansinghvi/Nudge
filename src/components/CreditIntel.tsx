@@ -75,7 +75,7 @@ const INITIAL_USER_CARDS: UserCard[] = [
     name: 'Infinia Metal',
     last4: '4092',
     network: 'Visa',
-    color: 'from-slate-800 to-slate-900',
+    color: 'from-slate-800 to-slate-900 text-white',
     limit: 15000,
     available: 12400,
     points: 45000,
@@ -101,7 +101,7 @@ const INITIAL_USER_CARDS: UserCard[] = [
     name: 'Octane',
     last4: '5514',
     network: 'Mastercard',
-    color: 'from-teal-600 to-teal-800',
+    color: 'from-teal-600 to-teal-800 text-white',
     limit: 5000,
     available: 1200,
     points: 8400,
@@ -143,12 +143,14 @@ export default function CreditIntel({ profile, transactions }: Props) {
     setTimeout(() => {
       setOptimizationResults([
         { category: 'Travel & Flights', card: 'HDFC Infinia Metal', reason: '5X Reward Points on SmartBuy', impact: `Save ~${formatCurrency(120)}/mo` },
+        { category: 'Dining & Groceries', card: 'Amex Platinum Travel', reason: 'Milestone benefits + 3X points', impact: `Save ~${formatCurrency(60)}/mo` },
         { category: 'Fuel & Transit', card: 'SBI Octane', reason: '7.25% Value back on BPCL pumps', impact: `Save ~${formatCurrency(40)}/mo` },
-        { category: 'Dining & Groceries', card: 'Amex Platinum Travel', reason: 'Milestone benefits + 3X points', impact: `Save ~${formatCurrency(60)}/mo` }
+        { category: 'Utilities & Bills', card: 'Amazon Pay ICICI', reason: 'Flat 2% reward on all utility payments', impact: `Save ~${formatCurrency(25)}/mo` },
+        { category: 'Entertainment', card: 'RBL Play', reason: 'Buy 1 Get 1 on movie tickets', impact: `Save ~${formatCurrency(35)}/mo` }
       ]);
       setIsOptimizing(false);
       addToast('Spending analyzed. Rewards optimized!', 'success');
-    }, 2000);
+    }, 1500);
   };
 
   const handleTransferAdvice = () => {
@@ -162,7 +164,7 @@ export default function CreditIntel({ profile, transactions }: Props) {
       });
       setIsTransferring(false);
       addToast('Transfer options analyzed.', 'success');
-    }, 2000);
+    }, 1500);
   };
 
   const fetchMarketCards = () => {
@@ -174,25 +176,25 @@ export default function CreditIntel({ profile, transactions }: Props) {
           bank: 'Chase',
           name: 'Sapphire Reserve',
           annualFee: 550,
-          benefits: ['$300 Travel Credit', '3X Points on Dining', 'Lounge Access'],
+          benefits: ['$300 Travel Credit', '3X Points Dining'],
           eligibility: 'Excellent Credit Required',
           matchScore: 94,
-          color: 'from-blue-800 to-blue-950'
+          color: 'from-blue-800 to-blue-950 text-white'
         },
         {
           id: 'm2',
           bank: 'Capital One',
           name: 'Venture X',
           annualFee: 395,
-          benefits: ['10,000 Anniversary Miles', '2X Miles on Everything', 'Global Entry Credit'],
+          benefits: ['10,000 Anniv Miles', '2X Miles All'],
           eligibility: 'Excellent Credit Required',
           matchScore: 88,
-          color: 'from-slate-700 to-slate-900'
+          color: 'from-slate-700 to-slate-900 text-white'
         }
       ]);
       setIsFetchingMarket(false);
-      addToast('New market cards fetched based on your profile.', 'success');
-    }, 2500);
+      addToast('New market cards fetched.', 'success');
+    }, 2000);
   };
 
   const toggleCompare = (id: string) => {
@@ -207,436 +209,193 @@ export default function CreditIntel({ profile, transactions }: Props) {
   };
 
   return (
-    <div className="space-y-8 pb-20">
-      {/* Header */}
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="h-full flex flex-col gap-3 relative">
+      {/* Compact Header */}
+      <header className="flex items-center justify-between flex-shrink-0">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-1 flex items-center gap-3">
-            <CreditCard className="w-10 h-10 text-indigo-500" />
+          <h1 className="text-xl font-bold tracking-tight mb-0.5 flex items-center gap-2">
+            <CreditCard className="w-5 h-5 text-accent-500" />
             Credit Intelligence
           </h1>
-          <p className="text-gray-500">Manage cards, maximize rewards, and discover premium offers.</p>
+          <p className="text-gray-500 text-xs">Manage cards, maximize rewards, and discover premium offers.</p>
         </div>
-        <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-500/20 rounded-full flex items-center justify-center">
-              <Award className="w-5 h-5 text-indigo-400" />
-            </div>
-            <div>
-              <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Total Reward Points</p>
-              <h2 className="text-2xl font-bold text-white">{totalPoints.toLocaleString()}</h2>
-            </div>
+        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-2 backdrop-blur-md">
+          <Award className="w-4 h-4 text-accent-400" />
+          <div className="text-right">
+            <p className="text-[9px] text-gray-400 uppercase tracking-widest font-bold">Total Points</p>
+            <h2 className="text-sm font-bold text-white">{totalPoints.toLocaleString()}</h2>
           </div>
         </div>
       </header>
 
-      {/* Section 1: Real Credit Card Display */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-indigo-400" />
-            Your Wallet
-          </h2>
+      {/* Your Wallet - Compact Cards Row */}
+      <div className="flex-shrink-0 bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 backdrop-blur-md">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xs font-bold flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-accent-400" /> Wallet</h2>
           {totalExpiring > 0 && (
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-500/10 border border-rose-500/20 rounded-full">
-              <AlertCircle className="w-4 h-4 text-rose-500 animate-pulse" />
-              <span className="text-xs font-bold text-rose-500">{totalExpiring.toLocaleString()} points expiring soon</span>
+            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-rose-500/10 rounded-md">
+              <AlertCircle className="w-3 h-3 text-rose-500 animate-pulse" />
+              <span className="text-[9px] font-bold text-rose-500">{totalExpiring.toLocaleString()} expiring</span>
             </div>
           )}
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 perspective-1000">
-          {userCards.map((card) => (
+        
+        <div className="flex gap-3 overflow-x-auto pb-2 noscrollbar">
+          {userCards.map(card => (
             <div 
               key={card.id}
-              className="relative w-full aspect-[1.586/1] cursor-pointer group"
-              style={{ perspective: '1000px' }}
-              onClick={() => setFlippedCardId(flippedCardId === card.id ? null : card.id)}
+              className={cn("w-48 h-28 rounded-lg flex-shrink-0 p-3 shadow-lg bg-gradient-to-br flex flex-col justify-between relative overflow-hidden group cursor-pointer border border-white/10", card.color)}
+              onClick={() => addToast(`Viewing details for ${card.name}`, 'info')}
             >
-              <motion.div
-                className="w-full h-full relative preserve-3d transition-all duration-500"
-                animate={{ rotateY: flippedCardId === card.id ? 180 : 0 }}
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                {/* Front of Card */}
-                <div 
-                  className={cn(
-                    "absolute inset-0 backface-hidden rounded-2xl p-6 flex flex-col justify-between shadow-2xl overflow-hidden bg-gradient-to-br border border-white/10",
-                    card.color
-                  )}
-                  style={{ backfaceVisibility: 'hidden' }}
-                >
-                  {/* Glossy Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-50 pointer-events-none" />
-                  
-                  <div className="flex justify-between items-start relative z-10">
-                    <span className="font-bold tracking-wider opacity-90">{card.bank}</span>
-                    <span className="text-sm font-bold opacity-80">{card.network}</span>
-                  </div>
-                  
-                  <div className="relative z-10">
-                    <div className="w-10 h-8 bg-yellow-400/80 rounded mb-4 opacity-80" /> {/* Chip */}
-                    <div className="text-xl tracking-[0.2em] font-mono opacity-90 mb-1">
-                      •••• •••• •••• {card.last4}
-                    </div>
-                    <div className="flex justify-between items-end">
-                      <div>
-                        <p className="text-[8px] uppercase tracking-widest opacity-60">Cardholder</p>
-                        <p className="font-bold tracking-widest text-sm uppercase">{profile.name}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[8px] uppercase tracking-widest opacity-60">Valid Thru</p>
-                        <p className="font-bold tracking-widest text-sm">{card.expiryDate}</p>
-                      </div>
-                    </div>
-                  </div>
+              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="flex justify-between items-start">
+                <span className="text-[9px] font-bold tracking-widest">{card.bank}</span>
+                <span className="text-[9px] font-bold">{card.network}</span>
+              </div>
+              <div>
+                <div className="w-5 h-4 bg-yellow-400/80 rounded mb-1.5" />
+                <div className="text-xs tracking-[0.2em] font-mono mb-1">•••• {card.last4}</div>
+                <div className="flex justify-between items-end">
+                  <p className="text-[8px] tracking-widest font-bold truncate pr-2">{profile.name}</p>
+                  <p className="text-[8px] font-bold">{card.expiryDate}</p>
                 </div>
-
-                {/* Back of Card */}
-                <div 
-                  className="absolute inset-0 backface-hidden rounded-2xl bg-zinc-900 border border-white/10 shadow-2xl overflow-hidden flex flex-col"
-                  style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-                >
-                  <div className="w-full h-12 bg-black mt-6" /> {/* Magnetic Stripe */}
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="text-[10px] text-gray-400 uppercase tracking-widest">Available Credit</p>
-                        <p className="text-lg font-bold text-white">{formatCurrency(card.available)}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] text-gray-400 uppercase tracking-widest">Reward Points</p>
-                        <p className="text-lg font-bold text-emerald-400">{card.points.toLocaleString()}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-500">CVV •••</span>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          addToast(`Viewing details for ${card.name}`, 'info');
-                        }}
-                        className="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors font-bold"
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+              </div>
             </div>
           ))}
+          <button className="w-48 h-28 rounded-lg flex-shrink-0 border border-dashed border-white/20 flex flex-col items-center justify-center hover:bg-white/5 transition-colors gap-2 text-gray-400 hover:text-white">
+            <Plus className="w-5 h-5" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Add Card</span>
+          </button>
         </div>
-      </section>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Section 2: Reward Optimization Engine */}
-        <section className="bg-white/5 border border-white/10 rounded-[32px] p-8 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="text-xl font-bold flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-indigo-400" />
-                Reward Optimization Engine
-              </h3>
-              <p className="text-sm text-gray-500 mt-1">AI analyzes your spending to suggest the best card per category.</p>
-            </div>
-            <button 
-              onClick={handleOptimize}
-              disabled={isOptimizing}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500 transition-all flex items-center gap-2 disabled:opacity-50"
-            >
-              {isOptimizing ? <Loader2 className="w-4 h-4 animate-spin" /> : <TrendingUp className="w-4 h-4" />}
-              Maximize Rewards
-            </button>
-          </div>
-
-          <div className="space-y-4 min-h-[200px]">
-            {isOptimizing ? (
-              <div className="h-full flex flex-col items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 text-indigo-500 animate-spin mb-4" />
-                <p className="text-sm font-bold text-gray-400">Analyzing spending patterns...</p>
-              </div>
-            ) : optimizationResults ? (
-              <AnimatePresence>
-                {optimizationResults.map((res: any, idx: number) => (
-                  <motion.div 
-                    key={idx}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl flex items-center justify-between"
-                  >
-                    <div>
-                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{res.category}</p>
-                      <p className="font-bold text-white mt-1">Use {res.card}</p>
-                      <p className="text-xs text-indigo-400 mt-1">{res.reason}</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full">
-                        {res.impact}
-                      </span>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            ) : (
-              <div className="h-full flex flex-col items-center justify-center py-12 border-2 border-dashed border-white/5 rounded-2xl">
-                <Sparkles className="w-8 h-8 text-gray-600 mb-4" />
-                <p className="text-sm text-gray-500">Click "Maximize Rewards" to generate your personalized strategy.</p>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* Section 3: Points Utilization & Transfer System */}
-        <section className="bg-white/5 border border-white/10 rounded-[32px] p-8 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="text-xl font-bold flex items-center gap-2">
-                <ArrowRightLeft className="w-5 h-5 text-emerald-400" />
-                Smart Point Transfer
-              </h3>
-              <p className="text-sm text-gray-500 mt-1">Discover the highest value redemption for your points.</p>
-            </div>
-            <button 
-              onClick={handleTransferAdvice}
-              disabled={isTransferring}
-              className="px-6 py-3 bg-emerald-600/20 text-emerald-400 border border-emerald-500/20 rounded-xl font-bold hover:bg-emerald-600/30 transition-all flex items-center gap-2 disabled:opacity-50"
-            >
-              {isTransferring ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-              Best Option
-            </button>
-          </div>
-
-          <div className="grid grid-cols-4 gap-2 mb-6">
-            {[
-              { icon: Plane, label: 'Flights' },
-              { icon: Building, label: 'Hotels' },
-              { icon: Gift, label: 'Gift Cards' },
-              { icon: DollarSign, label: 'Cashback' }
-            ].map((item, i) => (
-              <div key={i} className="flex flex-col items-center justify-center p-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors cursor-pointer">
-                <item.icon className="w-5 h-5 text-gray-400 mb-2" />
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{item.label}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="min-h-[120px]">
-            {isTransferring ? (
-              <div className="flex flex-col items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 text-emerald-500 animate-spin mb-3" />
-                <p className="text-xs font-bold text-gray-400">Calculating redemption values...</p>
-              </div>
-            ) : transferAdvice ? (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="p-5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-bold text-emerald-400">{transferAdvice.recommendation}</h4>
-                  <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-md">
-                    {transferAdvice.valueMultiplier} Value
-                  </span>
-                </div>
-                <p className="text-sm text-gray-300 leading-relaxed mb-4">{transferAdvice.details}</p>
-                <button className="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-500 transition-all flex items-center justify-center gap-2">
-                  {transferAdvice.action}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </motion.div>
-            ) : (
-              <div className="p-5 bg-white/5 border border-white/5 rounded-2xl text-center">
-                <p className="text-sm text-gray-500">Not sure how to use your points? Let AI find the best value.</p>
-              </div>
-            )}
-          </div>
-        </section>
       </div>
 
-      {/* Section 4: Market Intelligence */}
-      <section className="bg-white/5 border border-white/10 rounded-[32px] p-8 backdrop-blur-md">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div>
-            <h3 className="text-xl font-bold flex items-center gap-2">
-              <Search className="w-5 h-5 text-indigo-400" />
-              Market Intelligence
-            </h3>
-            <p className="text-sm text-gray-500 mt-1">AI-curated credit cards based on your income and spending habits.</p>
-          </div>
-          <div className="flex gap-3">
-            {marketCards.length > 0 && (
-              <button 
-                onClick={() => setCompareMode(!compareMode)}
-                className={cn(
-                  "px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2",
-                  compareMode ? "bg-indigo-600 text-white" : "bg-white/10 text-white hover:bg-white/20"
-                )}
-              >
-                <ArrowRightLeft className="w-4 h-4" />
-                {compareMode ? 'Cancel Compare' : 'Compare Cards'}
+      {/* Main Bottom Section */}
+      <div className="flex-1 min-h-0 flex gap-3">
+        {/* Left Col: Rewards Engine & Smart Transfer */}
+        <div className="flex-[1] flex flex-col gap-3 min-h-0">
+          
+          {/* Reward Engine */}
+          <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 flex flex-col min-h-0 backdrop-blur-md">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xs font-bold flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-accent-400" /> Optimization Engine</h3>
+              <button onClick={handleOptimize} disabled={isOptimizing} className="px-2 py-1 bg-action text-white rounded text-[10px] font-bold disabled:opacity-50">
+                {isOptimizing ? 'Analyzing...' : 'Maximize'}
               </button>
-            )}
-            <button 
-              onClick={fetchMarketCards}
-              disabled={isFetchingMarket}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500 transition-all flex items-center gap-2 disabled:opacity-50"
-            >
-              {isFetchingMarket ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-              Check New Cards
-            </button>
+            </div>
+            <div className="flex-1 overflow-y-auto space-y-2">
+              {!optimizationResults && !isOptimizing && (
+                <div className="h-full flex items-center justify-center text-center p-4">
+                  <p className="text-[10px] text-gray-500">Run optimization to see the best card for every expense category.</p>
+                </div>
+              )}
+              {optimizationResults?.map((res: any, i: number) => (
+                <div key={i} className="p-2 border border-accent-500/10 bg-accent-500/5 rounded-lg flex justify-between items-center">
+                  <div>
+                    <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{res.category}</p>
+                    <p className="text-[11px] font-bold text-white leading-tight">{res.card}</p>
+                    <p className="text-[9px] text-accent-400">{res.reason}</p>
+                  </div>
+                  <div className="bg-emerald-500/20 text-emerald-400 text-[9px] font-bold px-1.5 py-0.5 rounded ml-2 whitespace-nowrap">
+                    {res.impact}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Points Transfer */}
+          <div className="flex-1 bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 flex flex-col min-h-0 backdrop-blur-md">
+             <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-bold flex items-center gap-1.5"><ArrowRightLeft className="w-3.5 h-3.5 text-emerald-400" /> Smart Transfer</h3>
+              <button onClick={handleTransferAdvice} disabled={isTransferring} className="px-2 py-1 border border-emerald-500/20 text-emerald-400 bg-emerald-500/10 rounded text-[10px] font-bold hover:bg-emerald-500/20 disabled:opacity-50">
+                Best Option
+              </button>
+            </div>
+            
+            <div className="flex gap-2 mb-3">
+              <div className="flex-1 py-1.5 bg-white/5 border border-white/5 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-white/10">
+                <Plane className="w-3.5 h-3.5 text-gray-400 mb-1" /><span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Flights</span>
+              </div>
+              <div className="flex-1 py-1.5 bg-white/5 border border-white/5 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-white/10">
+                <Building className="w-3.5 h-3.5 text-gray-400 mb-1" /><span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Hotels</span>
+              </div>
+              <div className="flex-1 py-1.5 bg-white/5 border border-white/5 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-white/10">
+                <Gift className="w-3.5 h-3.5 text-gray-400 mb-1" /><span className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Cards</span>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto">
+              {!transferAdvice && !isTransferring && (
+                <div className="h-full flex items-center justify-center border border-white/5 border-dashed rounded-lg">
+                  <p className="text-[10px] text-gray-500 px-4 text-center">Let AI find the best value for your 45K points.</p>
+                </div>
+              )}
+              {transferAdvice && (
+                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                  <div className="flex justify-between items-center mb-1">
+                    <h4 className="text-[11px] font-bold text-emerald-400">{transferAdvice.recommendation}</h4>
+                    <span className="px-1 py-0.5 bg-emerald-500/20 text-emerald-400 text-[8px] font-bold rounded">{transferAdvice.valueMultiplier} Value</span>
+                  </div>
+                  <p className="text-[9px] text-gray-300 mb-2 leading-relaxed">{transferAdvice.details}</p>
+                  <button className="w-full py-1.5 bg-emerald-600/80 text-white rounded text-[10px] font-bold flex items-center justify-center gap-1 hover:bg-emerald-500">
+                    {transferAdvice.action} <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {isFetchingMarket ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-10 h-10 text-indigo-500 animate-spin mb-4" />
-            <p className="text-sm font-bold text-gray-400">Scanning market for premium offers...</p>
+        {/* Right Col: Market Intelligence */}
+        <div className="flex-[1] bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 flex flex-col min-h-0 backdrop-blur-md">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xs font-bold flex items-center gap-1.5"><Search className="w-3.5 h-3.5 text-accent-400" /> Market Check</h3>
+            <button onClick={fetchMarketCards} disabled={isFetchingMarket} className="px-2 py-1 bg-white/5 border border-white/10 rounded text-[10px] font-bold hover:bg-white/10 flex items-center gap-1 disabled:opacity-50">
+              {isFetchingMarket ? <Loader2 className="w-3 h-3 animate-spin"/> : <RefreshCw className="w-3 h-3"/>}
+              Refresh
+            </button>
           </div>
-        ) : marketCards.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div className="flex-1 overflow-y-auto space-y-3">
+            {!isFetchingMarket && marketCards.length === 0 && (
+              <div className="h-full flex flex-col items-center justify-center text-center p-4">
+                <Search className="w-8 h-8 text-white/10 mb-2" />
+                <p className="text-[10px] text-gray-500">Scan market for premium credit card offers tailored to you.</p>
+              </div>
+            )}
             {marketCards.map((card) => (
-              <motion.div 
-                key={card.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={cn(
-                  "relative p-6 rounded-2xl border transition-all",
-                  compareMode && cardsToCompare.includes(card.id) 
-                    ? "bg-indigo-500/10 border-indigo-500" 
-                    : "bg-white/5 border-white/10 hover:bg-white/10"
-                )}
-              >
-                {compareMode && (
-                  <div className="absolute top-4 right-4">
-                    <button 
-                      onClick={() => toggleCompare(card.id)}
-                      className={cn(
-                        "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
-                        cardsToCompare.includes(card.id) ? "bg-indigo-500 border-indigo-500" : "border-gray-500"
-                      )}
-                    >
-                      {cardsToCompare.includes(card.id) && <CheckCircle2 className="w-4 h-4 text-white" />}
-                    </button>
-                  </div>
-                )}
-                
-                <div className="flex items-start gap-6">
-                  {/* Mini Card Visual */}
-                  <div className={cn("w-24 h-16 rounded-lg shadow-lg bg-gradient-to-br flex-shrink-0", card.color)} />
-                  
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">{card.bank}</p>
-                        <h4 className="text-lg font-bold text-white">{card.name}</h4>
-                      </div>
-                      <div className="text-right">
-                        <span className="inline-flex items-center gap-1 px-2 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-md">
-                          <Sparkles className="w-3 h-3" />
-                          {card.matchScore}% Match
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-4 space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Annual Fee</span>
-                        <span className="font-bold">{formatCurrency(card.annualFee)}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-400">Eligibility</span>
-                        <span className="font-bold text-indigo-400">{card.eligibility}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-4 pt-4 border-t border-white/5">
-                      <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Key Benefits</p>
-                      <ul className="space-y-1">
-                        {card.benefits.map((benefit, i) => (
-                          <li key={i} className="text-xs text-gray-300 flex items-center gap-2">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                            {benefit}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+               <div key={card.id} className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all cursor-pointer">
+                 <div className="flex gap-3">
+                   <div className={cn("w-14 h-10 rounded shadow-md bg-gradient-to-br flex-shrink-0 border border-white/10", card.color)} />
+                   <div className="flex-1 min-w-0">
+                     <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest leading-none">{card.bank}</p>
+                     <p className="text-xs font-bold truncate leading-tight mt-0.5">{card.name}</p>
+                     <span className="inline-flex items-center gap-0.5 mt-1 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 text-[8px] font-bold rounded">
+                       <Sparkles className="w-2.5 h-2.5" /> {card.matchScore}% Match
+                     </span>
+                   </div>
+                 </div>
+                 <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between">
+                   <span className="text-[10px] font-bold">{formatCurrency(card.annualFee)}/yr</span>
+                   <span className="text-[9px] text-accent-400 font-medium truncate">{card.eligibility}</span>
+                 </div>
+                 <ul className="mt-2 space-y-1">
+                   {card.benefits.map((b, i) => (
+                     <li key={i} className="text-[9px] text-gray-400 flex items-center gap-1.5"><CheckCircle2 className="w-2.5 h-2.5 text-emerald-500" /> {b}</li>
+                   ))}
+                 </ul>
+               </div>
             ))}
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-white/5 rounded-2xl">
-            <Search className="w-12 h-12 text-gray-700 mb-4" />
-            <h4 className="text-lg font-bold text-gray-500">No Market Data</h4>
-            <p className="text-sm text-gray-600 mt-2">Click "Check New Cards" to scan the market.</p>
-          </div>
-        )}
-      </section>
+        </div>
+      </div>
 
-      {/* Comparison Modal Overlay */}
-      <AnimatePresence>
-        {compareMode && cardsToCompare.length === 2 && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] bg-zinc-900 border border-white/20 shadow-2xl rounded-[32px] p-6 w-[90%] max-w-4xl flex gap-6 items-center"
-          >
-            <div className="flex-1 grid grid-cols-2 gap-6 relative">
-              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-zinc-800 border border-white/10 rounded-full flex items-center justify-center text-xs font-bold text-gray-400 z-10">
-                VS
-              </div>
-              
-              {cardsToCompare.map(id => {
-                const card = marketCards.find(c => c.id === id)!;
-                return (
-                  <div key={id} className="text-center space-y-2">
-                    <h4 className="font-bold text-lg">{card.name}</h4>
-                    <p className="text-sm text-gray-400">Fee: {formatCurrency(card.annualFee)}</p>
-                    <div className="text-xs text-emerald-400 font-bold">{card.benefits[0]}</div>
-                  </div>
-                );
-              })}
-            </div>
-            <button 
-              onClick={() => {
-                setCompareMode(false);
-                setCardsToCompare([]);
-              }}
-              className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors flex-shrink-0"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Toasts */}
-      <div className="fixed bottom-8 right-8 z-[200] space-y-3 pointer-events-none">
+      <div className="fixed bottom-6 right-6 z-[200] space-y-2 pointer-events-none">
         <AnimatePresence>
           {toasts.map((toast) => (
-            <motion.div
-              key={toast.id}
-              initial={{ opacity: 0, x: 20, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-              className={cn(
-                "pointer-events-auto px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[240px] backdrop-blur-xl border",
-                toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" :
-                toast.type === 'warning' ? "bg-amber-500/20 border-amber-500/20 text-amber-400" :
-                toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" :
-                "bg-indigo-500/20 border-indigo-500/20 text-indigo-400"
-              )}
-            >
-              {toast.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : 
-               toast.type === 'warning' ? <AlertCircle className="w-5 h-5" /> :
-               toast.type === 'error' ? <X className="w-5 h-5" /> : 
-               <Info className="w-5 h-5" />}
-              <span className="font-bold text-sm">{toast.message}</span>
+            <motion.div key={toast.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className={cn("pointer-events-auto px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 min-w-[200px] backdrop-blur-xl border text-[11px]", toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" : toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" : "bg-accent-500/20 border-accent-500/20 text-accent-400")}>
+              {toast.type === 'success' ? <CheckCircle2 className="w-3.5 h-3.5" /> : toast.type === 'error' ? <X className="w-3.5 h-3.5" /> : <Info className="w-3.5 h-3.5" />}
+              <span className="font-bold">{toast.message}</span>
             </motion.div>
           ))}
         </AnimatePresence>

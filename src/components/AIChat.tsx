@@ -160,16 +160,16 @@ const AIChat = React.memo(function AIChat({ profile, transactions, onNavigate }:
   }, [input, isLoading, generateResponse]);
 
   return (
-    <div className="h-[calc(100vh-160px)] flex flex-col bg-nudge-card border border-nudge rounded-[40px] overflow-hidden shadow-2xl">
+    <div className="h-[calc(100vh-80px)] flex flex-col bg-nudge-card border border-nudge rounded-[28px] overflow-hidden shadow-2xl">
       {/* Header */}
-      <div className="px-8 py-6 border-b border-nudge bg-white/5 backdrop-blur-xl flex items-center justify-between">
+      <div className="px-5 py-3 border-b border-nudge bg-white/5 backdrop-blur-xl flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
-            <Sparkles className="w-7 h-7 text-white" />
+          <div className="w-10 h-10 bg-accent-600 rounded-xl flex items-center justify-center shadow-lg shadow-accent-600/20">
+            <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-nudge-primary">Financial Advisor</h2>
-            <p className="text-[10px] text-indigo-400 uppercase tracking-widest font-bold">Precision Intelligence • v2.0</p>
+            <h2 className="text-base font-bold tracking-tight text-nudge-primary">Financial Advisor</h2>
+            <p className="text-[9px] text-accent-400 uppercase tracking-widest font-bold">Precision Intelligence</p>
           </div>
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 rounded-full border border-emerald-500/20">
@@ -181,19 +181,19 @@ const AIChat = React.memo(function AIChat({ profile, transactions, onNavigate }:
       {/* Chat Area */}
       <div 
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-8 space-y-8 scroll-smooth"
+        className="flex-1 overflow-y-auto p-5 space-y-5 scroll-smooth"
       >
         {/* Suggestions */}
         {messages.length === 1 && (
-          <div className="grid grid-cols-2 gap-3 mb-8">
+          <div className="grid grid-cols-2 gap-2 mb-5">
             {SUGGESTIONS.map((s, i) => (
               <button
                 key={i}
                 onClick={() => generateResponse(s)}
-                className="p-4 bg-white/5 border border-white/10 rounded-2xl text-left text-sm hover:bg-white/10 transition-all group flex items-center justify-between"
+                className="p-3 bg-white/5 border border-white/10 rounded-xl text-left text-xs hover:bg-white/10 transition-all group flex items-center justify-between"
               >
                 <span className="text-nudge-secondary group-hover:text-nudge-primary transition-colors">{s}</span>
-                <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-indigo-400 transition-all" />
+                <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-accent-400 transition-all" />
               </button>
             ))}
           </div>
@@ -211,9 +211,9 @@ const AIChat = React.memo(function AIChat({ profile, transactions, onNavigate }:
               )}
             >
               <div className={cn(
-                "max-w-[85%] p-6 rounded-[32px] text-sm leading-relaxed shadow-xl border",
+                "max-w-[85%] p-4 rounded-[20px] text-xs leading-relaxed shadow-xl border",
                 msg.role === 'user' 
-                  ? "bg-indigo-600 border-indigo-500 text-white rounded-tr-none" 
+                  ? "bg-accent-600 border-accent-500 text-white rounded-tr-none" 
                   : "bg-white/5 border-white/10 text-nudge-primary rounded-tl-none"
               )}>
                 <div className="whitespace-pre-wrap font-medium">
@@ -237,7 +237,7 @@ const AIChat = React.memo(function AIChat({ profile, transactions, onNavigate }:
                       onClick={() => onNavigate(action.tab)}
                       className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-2 text-nudge-secondary hover:text-nudge-primary"
                     >
-                      <action.icon className="w-3 h-3 text-indigo-400" />
+                      <action.icon className="w-3 h-3 text-accent-400" />
                       {action.label}
                     </button>
                   ))}
@@ -255,7 +255,7 @@ const AIChat = React.memo(function AIChat({ profile, transactions, onNavigate }:
           >
             <div className="bg-white/5 border border-white/10 p-5 rounded-[32px] rounded-tl-none">
               <div className="flex items-center gap-3">
-                <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />
+                <Loader2 className="w-4 h-4 text-accent-500 animate-spin" />
                 <span className="text-xs font-bold text-nudge-secondary uppercase tracking-widest">Thinking...</span>
               </div>
             </div>
@@ -264,31 +264,31 @@ const AIChat = React.memo(function AIChat({ profile, transactions, onNavigate }:
       </div>
 
       {/* Input Area */}
-      <div className="p-8 border-t border-nudge bg-white/[0.02]">
+      <div className="p-4 border-t border-nudge bg-white/[0.02]">
         <form onSubmit={handleSend} className="relative max-w-4xl mx-auto">
           <input 
             type="text" 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask a precise financial question..."
-            className="w-full bg-white/5 border border-white/10 rounded-[24px] py-5 pl-8 pr-16 focus:outline-none focus:border-indigo-500 transition-all text-lg shadow-inner placeholder:text-gray-600 text-nudge-primary"
+            className="w-full bg-white/5 border border-white/10 rounded-[18px] py-3.5 pl-5 pr-14 focus:outline-none focus:border-accent-500 transition-all text-sm shadow-inner placeholder:text-gray-600 text-nudge-primary"
           />
           <button 
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="absolute right-3 top-3 bottom-3 px-6 bg-indigo-600 text-white rounded-2xl disabled:opacity-50 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center"
+            className="absolute right-2 top-2 bottom-2 px-4 bg-action text-white rounded-xl disabled:opacity-50 hover:bg-accent-500 transition-all shadow-lg shadow-accent-600/20 flex items-center justify-center"
           >
-            <ArrowRight className="w-6 h-6" />
+            <ArrowRight className="w-5 h-5" />
           </button>
         </form>
-        <div className="mt-4 flex justify-center gap-6">
+        <div className="mt-2 flex justify-center gap-5">
           {QUICK_ACTIONS.map((action, i) => (
             <button 
               key={i}
               onClick={() => onNavigate(action.tab)}
-              className="text-[10px] font-bold text-nudge-secondary uppercase tracking-widest hover:text-indigo-400 transition-colors flex items-center gap-1.5"
+              className="text-[9px] font-bold text-nudge-secondary uppercase tracking-widest hover:text-accent-400 transition-colors flex items-center gap-1"
             >
-              <action.icon className="w-3 h-3" />
+              <action.icon className="w-2.5 h-2.5" />
               {action.label}
             </button>
           ))}

@@ -20,17 +20,6 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  AreaChart,
-  Area
-} from 'recharts';
 import { Transaction, UserProfile } from '../types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -81,12 +70,11 @@ export default function FraudDetection({ profile, transactions }: Props) {
     }, 3000);
   };
 
-  // Initialize fraud data from transactions
   useEffect(() => {
     if (transactions.length > 0 && fraudData.length === 0) {
       const initialData = transactions.map(tx => ({
         ...tx,
-        riskScore: Math.floor(Math.random() * 20), // Low initial risk
+        riskScore: Math.floor(Math.random() * 20),
         location: locations[Math.floor(Math.random() * locations.length)],
         status: 'Safe' as const,
       }));
@@ -100,22 +88,17 @@ export default function FraudDetection({ profile, transactions }: Props) {
     
     setTimeout(() => {
       const scannedData = fraudData.map(tx => {
-        let score = Math.floor(Math.random() * 15); // Base noise
+        let score = Math.floor(Math.random() * 15);
         let reason = '';
 
-        // Logic 1: Large Amount
         if (Math.abs(tx.amount) > 1000) {
           score += 40;
           reason = 'Unusually high transaction amount detected.';
         }
-
-        // Logic 2: Unusual Location (Simulated)
         if (Math.random() > 0.8) {
           score += 30;
           reason = reason ? reason + ' New location anomaly.' : 'Transaction from an unrecognized location.';
         }
-
-        // Logic 3: Frequency (Simulated)
         if (Math.random() > 0.9) {
           score += 25;
           reason = reason ? reason + ' High frequency burst.' : 'Rapid sequence of transactions detected.';
@@ -151,12 +134,20 @@ export default function FraudDetection({ profile, transactions }: Props) {
     setTimeout(() => {
       const suspicious = fraudData.filter(tx => tx.status === 'Suspicious');
       if (suspicious.length === 0) {
-        setAiInsights(['No immediate threats detected. Your account patterns look healthy.']);
+        setAiInsights([
+          'No immediate threats detected. Your account patterns look healthy.',
+          'Recommendation: Use a unique password for your linked bank accounts.',
+          'Security Tip: Review your trusted devices list in Settings.',
+          'Action: Set up transaction alerts for amounts over $100.',
+          'Pro-tip: Periodic manual audits of your statement are a great habit.'
+        ]);
       } else {
         const insights = [
           `Detected ${suspicious.length} anomalies in the last 24 hours.`,
           `Unusual high-value transaction of ${formatCurrency(Math.abs(suspicious[0]?.amount || 0))} at ${suspicious[0]?.location}.`,
-          `Recommendation: Enable 2FA for all transactions above $500.`
+          `Recommendation: Enable 2FA for all transactions above $500.`,
+          `Alert: Rapid sequence of small transactions detected on your account.`,
+          `Security Tip: You haven't changed your transaction password in 90 days. Consider an update.`
         ];
         setAiInsights(insights);
       }
@@ -168,108 +159,93 @@ export default function FraudDetection({ profile, transactions }: Props) {
   const suspiciousCount = fraudData.filter(tx => tx.status === 'Suspicious').length;
   const riskLevel = suspiciousCount > 3 ? 'High' : suspiciousCount > 0 ? 'Medium' : 'Low';
 
-  const riskTrendData = useMemo(() => {
-    return fraudData.slice(0, 10).reverse().map((tx, i) => ({
-      time: `T-${10-i}`,
-      score: tx.riskScore
-    }));
-  }, [fraudData]);
-
   const filteredData = activeFilter === 'all' ? fraudData : fraudData.filter(tx => tx.status === 'Suspicious' || tx.status === 'Reported');
 
   return (
-    <div className="space-y-8 pb-20">
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="h-full flex flex-col gap-3">
+      <header className="flex items-center justify-between flex-shrink-0">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-1 flex items-center gap-3">
-            <ShieldAlert className="w-10 h-10 text-rose-500" />
+          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+            <ShieldAlert className="w-7 h-7 text-rose-500" />
             Fraud Detection
           </h1>
-          <p className="text-gray-500">Real-time security monitoring and threat analysis.</p>
+          <p className="text-gray-500 text-xs mt-0.5">Real-time security monitoring and threat analysis.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <button 
-            onClick={handleScan}
-            disabled={isScanning}
-            className="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-500 transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 disabled:opacity-50"
-          >
-            {isScanning ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
-            {isScanning ? 'Analyzing...' : 'Scan Transactions'}
-          </button>
-        </div>
+        <button 
+          onClick={handleScan}
+          disabled={isScanning}
+          className="px-4 py-2.5 bg-action text-white rounded-xl font-bold hover:bg-accent-500 transition-all flex items-center gap-2 shadow-lg shadow-accent-600/20 disabled:opacity-50 text-sm"
+        >
+          {isScanning ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+          {isScanning ? 'Analyzing...' : 'Scan'}
+        </button>
       </header>
 
-      {/* Overview Dashboard */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-              <Activity className="w-6 h-6 text-indigo-400" />
+      {/* Overview Dashboard - Compact */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
+        <div className="card-glass p-3.5">
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center">
+              <Activity className="w-4 h-4 text-accent-400" />
             </div>
-            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Live</span>
+            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Live</span>
           </div>
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Total Scanned</p>
-          <h3 className="text-3xl font-bold">{fraudData.length}</h3>
+          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Total Scanned</p>
+          <h3 className="text-xl font-bold">{fraudData.length}</h3>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center">
-              <AlertTriangle className="w-6 h-6 text-rose-500" />
+        <div className="card-glass p-3.5">
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <div className="w-7 h-7 bg-rose-500/10 rounded-lg flex items-center justify-center">
+              <AlertTriangle className="w-4 h-4 text-rose-500" />
             </div>
-            {suspiciousCount > 0 && (
-              <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-ping" />
-            )}
+            {suspiciousCount > 0 && <span className="flex h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />}
           </div>
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Suspicious</p>
-          <h3 className={cn("text-3xl font-bold", suspiciousCount > 0 ? "text-rose-500" : "text-white")}>
-            {suspiciousCount}
-          </h3>
+          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Suspicious</p>
+          <h3 className={cn("text-xl font-bold", suspiciousCount > 0 ? "text-rose-500" : "text-white")}>{suspiciousCount}</h3>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-emerald-400" />
+        <div className="card-glass p-3.5">
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center">
+              <TrendingUp className="w-4 h-4 text-emerald-400" />
             </div>
           </div>
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Risk Level</p>
+          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Risk Level</p>
           <h3 className={cn(
-            "text-3xl font-bold",
+            "text-xl font-bold",
             riskLevel === 'High' ? "text-rose-500" : riskLevel === 'Medium' ? "text-amber-500" : "text-emerald-500"
-          )}>
-            {riskLevel}
-          </h3>
+          )}>{riskLevel}</h3>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center">
-              <Clock className="w-6 h-6 text-gray-400" />
+        <div className="card-glass p-3.5">
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <div className="w-7 h-7 bg-white/5 rounded-lg flex items-center justify-center">
+              <Clock className="w-4 h-4 text-gray-400" />
             </div>
           </div>
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1">Last Scan</p>
-          <h3 className="text-xl font-bold">{lastScanTime || 'Never'}</h3>
+          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Last Scan</p>
+          <h3 className="text-base font-bold">{lastScanTime || 'Never'}</h3>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 min-h-0">
         {/* Risk Analysis Table */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-md">
-            <div className="p-8 border-b border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <h3 className="text-xl font-bold flex items-center gap-2">
-                <Activity className="w-5 h-5 text-indigo-400" />
-                Risk Analysis Table
+        <div className="lg:col-span-2 flex flex-col min-h-0">
+          <div className="card-glass flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="p-4 border-b border-white/5 flex items-center justify-between flex-shrink-0">
+              <h3 className="text-sm font-bold flex items-center gap-2">
+                <Activity className="w-4 h-4 text-accent-400" />
+                Risk Analysis
               </h3>
-              <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
+              <div className="flex bg-white/5 p-0.5 rounded-lg border border-white/10">
                 {(['all', 'suspicious'] as const).map((f) => (
                   <button
                     key={f}
                     onClick={() => setActiveFilter(f)}
                     className={cn(
-                      "px-4 py-2 rounded-lg text-sm font-medium transition-all",
-                      activeFilter === f ? "bg-indigo-600 text-white shadow-lg" : "text-gray-500 hover:text-gray-300"
+                      "px-3 py-1.5 rounded-md text-xs font-medium transition-all",
+                      activeFilter === f ? "bg-action text-white shadow" : "text-gray-500 hover:text-gray-300"
                     )}
                   >
                     {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -277,14 +253,14 @@ export default function FraudDetection({ profile, transactions }: Props) {
                 ))}
               </div>
             </div>
-            <div className="overflow-x-auto">
+            <div className="overflow-y-auto flex-1 min-h-0">
               <table className="w-full text-left">
-                <thead>
-                  <tr className="text-gray-500 text-xs uppercase tracking-widest border-b border-white/5">
-                    <th className="px-8 py-4 font-bold">Merchant / Location</th>
-                    <th className="px-8 py-4 font-bold">Amount</th>
-                    <th className="px-8 py-4 font-bold">Risk Score</th>
-                    <th className="px-8 py-4 font-bold">Status</th>
+                <thead className="sticky top-0 bg-nudge-primary z-10">
+                  <tr className="text-gray-500 text-[10px] uppercase tracking-widest border-b border-white/5">
+                    <th className="px-4 py-2.5 font-bold">Merchant / Location</th>
+                    <th className="px-4 py-2.5 font-bold">Amount</th>
+                    <th className="px-4 py-2.5 font-bold">Risk</th>
+                    <th className="px-4 py-2.5 font-bold">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -296,19 +272,19 @@ export default function FraudDetection({ profile, transactions }: Props) {
                         tx.status === 'Suspicious' ? "bg-rose-500/5" : ""
                       )}
                     >
-                      <td className="px-8 py-6">
-                        <div className="font-bold">{tx.name}</div>
-                        <div className="flex items-center gap-1 text-xs text-gray-500 mt-1">
-                          <MapPin className="w-3 h-3" />
+                      <td className="px-4 py-2.5">
+                        <div className="font-bold text-xs">{tx.name}</div>
+                        <div className="flex items-center gap-1 text-[10px] text-gray-500 mt-0.5">
+                          <MapPin className="w-2.5 h-2.5" />
                           {tx.location}
                         </div>
                       </td>
-                      <td className="px-8 py-6 font-bold">
+                      <td className="px-4 py-2.5 font-bold text-xs">
                         {formatCurrency(tx.amount)}
                       </td>
-                      <td className="px-8 py-6">
-                        <div className="flex items-center gap-3">
-                          <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden max-w-[60px]">
+                      <td className="px-4 py-2.5">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden max-w-[40px]">
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${tx.riskScore}%` }}
@@ -319,16 +295,16 @@ export default function FraudDetection({ profile, transactions }: Props) {
                             />
                           </div>
                           <span className={cn(
-                            "text-xs font-bold",
+                            "text-[10px] font-bold",
                             tx.riskScore > 70 ? "text-rose-500" : tx.riskScore > 40 ? "text-amber-500" : "text-emerald-500"
                           )}>
                             {tx.riskScore}
                           </span>
                         </div>
                       </td>
-                      <td className="px-8 py-6">
+                      <td className="px-4 py-2.5">
                         <span className={cn(
-                          "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter",
+                          "px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-tighter",
                           tx.status === 'Suspicious' ? "bg-rose-500/20 text-rose-500" : 
                           tx.status === 'Reported' ? "bg-rose-600 text-white" :
                           "bg-emerald-500/20 text-emerald-500"
@@ -342,115 +318,81 @@ export default function FraudDetection({ profile, transactions }: Props) {
               </table>
             </div>
           </div>
-
-          {/* Risk Trend Visualization */}
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
-            <h3 className="text-xl font-bold mb-8 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-indigo-400" />
-              Risk Trend Visualization
-            </h3>
-            <div className="h-[250px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={riskTrendData}>
-                  <defs>
-                    <linearGradient id="colorRisk" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
-                  <XAxis dataKey="time" stroke="#6b7280" fontSize={10} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#6b7280" fontSize={10} tickLine={false} axisLine={false} domain={[0, 100]} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '12px' }}
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="score" 
-                    stroke="#6366f1" 
-                    fillOpacity={1} 
-                    fill="url(#colorRisk)" 
-                    strokeWidth={3}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
         </div>
 
-        {/* Right Column: Alerts & AI Insights */}
-        <div className="space-y-8">
+        {/* Right Column: Alerts & Controls */}
+        <div className="flex flex-col gap-3 min-h-0 overflow-y-auto pr-1">
           {/* Alerts Panel */}
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-rose-500" />
+          <div className="card-glass p-4 flex-shrink-0">
+            <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-rose-500" />
               Active Alerts
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-2 max-h-[180px] overflow-y-auto">
               <AnimatePresence mode="popLayout">
-                {fraudData.filter(tx => tx.status === 'Suspicious').map((tx) => (
+                {fraudData.filter(tx => tx.status === 'Suspicious').slice(0, 3).map((tx) => (
                   <motion.div 
                     key={tx.id}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    className="p-5 bg-rose-500/10 border border-rose-500/20 rounded-2xl space-y-4"
+                    className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl space-y-2"
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <h4 className="font-bold text-rose-500">Suspicious Activity</h4>
-                        <p className="text-xs text-gray-400 mt-1">{tx.reason}</p>
+                        <h4 className="font-bold text-xs text-rose-500">Suspicious Activity</h4>
+                        <p className="text-[10px] text-gray-400 mt-0.5">{tx.reason}</p>
                       </div>
-                      <span className="text-xs font-bold text-rose-500">{formatCurrency(Math.abs(tx.amount))}</span>
+                      <span className="text-[10px] font-bold text-rose-500">{formatCurrency(Math.abs(tx.amount))}</span>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1.5">
                       <button 
                         onClick={() => handleMarkSafe(tx.id)}
-                        className="flex-1 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-all"
+                        className="flex-1 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg text-[10px] font-bold transition-all"
                       >
                         Mark Safe
                       </button>
                       <button 
                         onClick={() => handleReportFraud(tx.id)}
-                        className="flex-1 py-2 bg-rose-600 hover:bg-rose-500 rounded-xl text-xs font-bold transition-all"
+                        className="flex-1 py-1.5 bg-rose-600 hover:bg-rose-500 rounded-lg text-[10px] font-bold transition-all"
                       >
-                        Report Fraud
+                        Report
                       </button>
                     </div>
                   </motion.div>
                 ))}
               </AnimatePresence>
               {suspiciousCount === 0 && (
-                <div className="text-center py-12 text-gray-500">
-                  <ShieldCheck className="w-12 h-12 mx-auto mb-4 opacity-10" />
-                  <p className="text-sm">No active security alerts.</p>
+                <div className="text-center py-6 text-gray-500">
+                  <ShieldCheck className="w-8 h-8 mx-auto mb-2 opacity-10" />
+                  <p className="text-xs">No active alerts.</p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* AI Fraud Insights */}
-          <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold flex items-center gap-2">
-                <Zap className="w-5 h-5 text-indigo-400" />
-                AI Fraud Insights
+          {/* AI Insights */}
+          <div className="card-glass p-4 bg-gradient-to-br from-accent-600/10 to-purple-600/10 flex-shrink-0">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-bold flex items-center gap-2">
+                <Zap className="w-4 h-4 text-accent-400" />
+                AI Insights
               </h3>
               <button 
                 onClick={generateAIInsights}
                 disabled={isGeneratingInsights}
-                className="p-2 hover:bg-white/10 rounded-lg transition-all disabled:opacity-50"
+                className="p-1.5 hover:bg-white/10 rounded-lg transition-all disabled:opacity-50"
               >
-                {isGeneratingInsights ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+                {isGeneratingInsights ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
               </button>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-2">
               {aiInsights.map((insight, idx) => (
                 <motion.div 
                   key={idx}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-4 bg-white/5 border border-white/10 rounded-2xl text-sm leading-relaxed"
+                  className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-xs leading-relaxed"
                 >
                   {insight}
                 </motion.div>
@@ -458,36 +400,36 @@ export default function FraudDetection({ profile, transactions }: Props) {
               {aiInsights.length === 0 && !isGeneratingInsights && (
                 <button 
                   onClick={generateAIInsights}
-                  className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-gray-400 hover:bg-white/10 transition-all"
+                  className="w-full py-3 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-gray-400 hover:bg-white/10 transition-all"
                 >
-                  Generate Security Insights
+                  Generate Insights
                 </button>
               )}
             </div>
           </div>
 
-          {/* User Action Panel */}
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-              <Lock className="w-5 h-5 text-gray-400" />
+          {/* Security Controls */}
+          <div className="card-glass p-4 flex-shrink-0">
+            <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+              <Lock className="w-4 h-4 text-gray-400" />
               Security Controls
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               <button 
                 onClick={() => {
                   setIsAccountFrozen(!isAccountFrozen);
                   addToast(isAccountFrozen ? 'Account unfrozen.' : 'Account temporarily frozen.', isAccountFrozen ? 'success' : 'warning');
                 }}
                 className={cn(
-                  "w-full flex items-center justify-between p-4 rounded-2xl transition-all group",
+                  "w-full flex items-center justify-between p-3 rounded-xl transition-all group text-sm",
                   isAccountFrozen ? "bg-rose-600 text-white" : "bg-white/5 border border-white/10 hover:bg-white/10"
                 )}
               >
-                <div className="flex items-center gap-3">
-                  <ShieldAlert className="w-5 h-5" />
-                  <span className="font-bold">{isAccountFrozen ? 'Unfreeze Account' : 'Freeze Account'}</span>
+                <div className="flex items-center gap-2">
+                  <ShieldAlert className="w-4 h-4" />
+                  <span className="font-bold text-xs">{isAccountFrozen ? 'Unfreeze' : 'Freeze Account'}</span>
                 </div>
-                <ChevronRight className="w-5 h-5 opacity-50" />
+                <ChevronRight className="w-4 h-4 opacity-50" />
               </button>
               <button 
                 onClick={() => {
@@ -495,22 +437,15 @@ export default function FraudDetection({ profile, transactions }: Props) {
                   addToast(isCardBlocked ? 'Card unblocked.' : 'Card blocked successfully.', isCardBlocked ? 'success' : 'warning');
                 }}
                 className={cn(
-                  "w-full flex items-center justify-between p-4 rounded-2xl transition-all group",
+                  "w-full flex items-center justify-between p-3 rounded-xl transition-all group text-sm",
                   isCardBlocked ? "bg-rose-600 text-white" : "bg-white/5 border border-white/10 hover:bg-white/10"
                 )}
               >
-                <div className="flex items-center gap-3">
-                  <CreditCard className="w-5 h-5" />
-                  <span className="font-bold">{isCardBlocked ? 'Unblock Card' : 'Block Card'}</span>
+                <div className="flex items-center gap-2">
+                  <CreditCard className="w-4 h-4" />
+                  <span className="font-bold text-xs">{isCardBlocked ? 'Unblock' : 'Block Card'}</span>
                 </div>
-                <ChevronRight className="w-5 h-5 opacity-50" />
-              </button>
-              <button className="w-full flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group">
-                <div className="flex items-center gap-3">
-                  <Headphones className="w-5 h-5 text-indigo-400" />
-                  <span className="font-bold">Contact Support</span>
-                </div>
-                <ChevronRight className="w-5 h-5 opacity-50" />
+                <ChevronRight className="w-4 h-4 opacity-50" />
               </button>
             </div>
           </div>
@@ -518,7 +453,7 @@ export default function FraudDetection({ profile, transactions }: Props) {
       </div>
 
       {/* Toasts */}
-      <div className="fixed bottom-8 right-8 z-[200] space-y-3 pointer-events-none">
+      <div className="fixed bottom-6 right-6 z-[200] space-y-2 pointer-events-none">
         <AnimatePresence>
           {toasts.map((toast) => (
             <motion.div
@@ -527,16 +462,16 @@ export default function FraudDetection({ profile, transactions }: Props) {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
               className={cn(
-                "pointer-events-auto px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[240px] backdrop-blur-xl border",
+                "pointer-events-auto px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 min-w-[200px] backdrop-blur-xl border text-xs",
                 toast.type === 'success' ? "bg-emerald-500/20 border-emerald-500/20 text-emerald-400" :
                 toast.type === 'error' ? "bg-rose-500/20 border-rose-500/20 text-rose-400" :
                 "bg-amber-500/20 border-amber-500/20 text-amber-400"
               )}
             >
-              {toast.type === 'success' ? <Check className="w-5 h-5" /> : 
-               toast.type === 'error' ? <X className="w-5 h-5" /> : 
-               <Info className="w-5 h-5" />}
-              <span className="font-bold text-sm">{toast.message}</span>
+              {toast.type === 'success' ? <Check className="w-4 h-4" /> : 
+               toast.type === 'error' ? <X className="w-4 h-4" /> : 
+               <Info className="w-4 h-4" />}
+              <span className="font-bold">{toast.message}</span>
             </motion.div>
           ))}
         </AnimatePresence>
